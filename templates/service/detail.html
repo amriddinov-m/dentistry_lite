@@ -1,0 +1,200 @@
+{% extends 'layout/base.html' %}
+{% load humanize poll_extras %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список услуг категории : {{ category.name }}</h6>
+                        <a href="#service_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="table-responsive">
+                            <table id="service_data_table" class="table table-striped thead-primary w-100">
+                                <thead>
+                                <tr role="row">
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Название
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Цена
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Статус
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Создано
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Действия
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for service in services %}
+                                    <tr role="row">
+                                        <td>{{ service.name }}</td>
+                                        <td>{{ service.price|intcomma|remove_zero }}</td>
+                                        <td>{{ service.get_status_display }}</td>
+                                        <td>{{ service.created }}</td>
+                                        <td>
+                                            <a class="cursor_pointer" onclick="service_update('{{ service.id }}', '{{ service.name }}', '{{ service.price|remove_zero }}', '{{ service.status }}')">
+                                                <i class="text-primary fa fa-pencil-alt"></i>
+                                            </a>
+                                            <a class="cursor_pointer" onclick="send_post('{% url 'service_action' %}', {'action': 'delete_service', 'service_id': '{{ service.pk }}', 'category_id': '{{ category.pk }}'}, 'Вы действительно хотите удалить услугу?')">
+                                                <i class="text-danger fa fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="service_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Создать услугу</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали услуги</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'service_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_service">
+                                    <input type="hidden" name="category_id" value="{{ category.pk }}">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Цена</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" name="price">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="service_update" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Изменить услугу</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали категории</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'service_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_service">
+                                    <input type="hidden" name="service_id" value="" id="service_id">
+                                    <input type="hidden" name="category_id" value="{{ category.pk }}">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name" id="service_name">
+                                            </div>
+                                        </div>
+                                         <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Цена</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" name="price" id="service_price">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status" id="service_status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#service_data_table').DataTable()
+        });
+
+        function service_update(service_id, name, price, status) {
+            $('#service_update').modal('toggle')
+            $('#service_id').val(service_id)
+            $('#service_name').val(name)
+            $('#service_price').val(price)
+            $('#service_status').val(status)
+        }
+
+    </script>
+{% endblock extra_js %}

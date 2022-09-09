@@ -1,0 +1,182 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список категории услуг</h6>
+                        <a href="#service_category_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="table-responsive">
+                            <table id="service_data_table" class="table table-striped thead-primary w-100">
+                                <thead>
+                                <tr role="row">
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Название
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Статус
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Создано
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Действия
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for category in categories %}
+                                    <tr role="row">
+                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.get_status_display }}</td>
+                                        <td>{{ category.created }}</td>
+                                        <td>
+                                            <a class="cursor_pointer" onclick="service_category_update('{{ category.id }}', '{{ category.name }}', '{{ category.status }}')">
+                                                <i class="text-primary fa fa-pencil-alt"></i>
+                                            </a>
+                                            <a class="cursor_pointer" onclick="send_post('{% url 'service_action' %}', {'action': 'delete_service_category', 'category_id': '{{ category.pk }}'}, 'Вы действительно хотите удалить категорию услуг?')">
+                                                <i class="text-danger fa fa-trash-alt"></i>
+                                            </a>
+                                            <a href="{% url 'service_category_detail' category.pk %}">
+                                                <i class="text-success fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="service_category_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Создать категорию услуг</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали категории</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'service_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_service_category">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="service_category_update" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Изменить категорию услуг</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали категории</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'service_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_service_category">
+                                    <input type="hidden" name="category_id" value="" id="service_category_id">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name" id="service_category_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status" id="service_category_status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#service_data_table').DataTable()
+        });
+
+        function service_category_update(category_id, name, status) {
+            $('#service_category_update').modal('toggle')
+            $('#service_category_id').val(category_id)
+            $('#service_category_name').val(name)
+            $('#service_category_status').val(status)
+        }
+
+    </script>
+{% endblock extra_js %}

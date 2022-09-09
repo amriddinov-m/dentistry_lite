@@ -1,0 +1,105 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список пользователей</h6>
+                        <a href="{% url 'doctor_create' %}" class="ms-text-primary">Добавить</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="table-responsive">
+                            <table id="doctor_data_table" class="table table-striped thead-primary w-100">
+                                <thead>
+                                <tr role="row">
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Роль
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Ф.И.О
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Телефон
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Адрес
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Дата рождения
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Дата добавления
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Время начала работы
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Время конца работы
+                                    </th>
+
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Действия
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for doctor in doctors %}
+                                    <tr role="row">
+                                        <td>{{ doctor.get_role_display }}</td>
+                                        <td>{{ doctor.fullname }}</td>
+                                        <td>{{ doctor.phone }}</td>
+                                        <td>{{ doctor.address }}</td>
+                                        <td>{{ doctor.birthday }}</td>
+                                        <td>{{ doctor.created }}</td>
+                                        <td>{{ doctor.start_time }}</td>
+                                        <td>{{ doctor.end_time }}</td>
+                                        <td>
+
+                                            <a href="{% url 'doctor_update' doctor.pk %}">
+                                                <i class="text-primary fa fa-pencil-alt"></i>
+                                            </a>
+                                            <a onclick="send_post('{% url 'doctor_action' %}', {'action': 'delete_doctor', 'doctor_id': '{{ doctor.pk }}'}, 'Вы действительно хотите удалить пользователя?')">
+                                                <i class="text-danger fa fa-trash-alt"></i>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#doctor_data_table').DataTable()
+        });
+
+    </script>
+{% endblock extra_js %}

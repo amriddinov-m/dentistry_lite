@@ -1,0 +1,262 @@
+{% extends 'layout/base.html' %}
+{% load static poll_extras humanize %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header header-mini">
+                        <div class="d-flex justify-content-between">
+                            <h6>Заявка №{{ order.pk }}</h6>
+                            <h6>
+                                <span
+                                    class="badge badge-{% if order.status == 'process' %}primary{% elif order.status == 'done' %}success{% else %}danger{% endif %}">{{ order.get_status_display }}</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="ms-panel-body">
+                        <!-- Invoice To -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="ms-card ms-widget ms-profile-widget ms-card-fh">
+                                    <div class="ms-card-body" style="padding-top: 10px !important;">
+                                        <h2>Пациент</h2>
+                                        <h2>{{ order.patient.fullname }}</h2>
+                                        <span>{{ order.patient.phone }}</span>
+                                        <p>{{ order.patient.address }}</p>
+                                        <a href="{% url 'patient_detail' order.patient_id %}"
+                                           class="btn btn-gradient-primary">
+                                            Подробнее
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="ms-card ms-widget ms-profile-widget ms-card-fh">
+                                    <div class="ms-card-body" style="padding-top: 10px !important;">
+                                        <h2>Доктор</h2>
+                                        <h2>{{ order.doctor.fullname }}</h2>
+                                        <span>{{ order.doctor.get_status_display }}</span>
+                                        <p>{{ order.doctor.start_time }} - {{ order.doctor.end_time }}</p>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="invoice-buttons text-left">
+
+                                <a href="#" class="btn btn-success mr-2"><i class="fas fa-print"></i>
+                                    Распечатать</a>
+                                {% if order.status == 'process' %}
+                                    <a href="#order_item_create" data-toggle="modal" class="btn btn-info mr-2"><i
+                                            class="fas fa-plus"></i>
+                                        Добавить</a>
+                                    <a onclick="send_post('{% url 'order_action' %}', {'action': 'update_status_order', 'order_id': '{{ order.pk }}', 'status': 'done'}, 'Вы действительно хотите закрыть заявку?')"
+                                       class="btn btn-secondary mr-2 text-white"><i class="fas fa-check"></i> Закрыть
+                                        заявку</a>
+                                    <a onclick="send_post('{% url 'order_action' %}', {'action': 'update_status_order', 'order_id': '{{ order.pk }}', 'status': 'canceled'}, 'Вы действительно хотите отменить заявку?')"
+                                       class="btn btn-warning mr-2 text-white"><i class="fas fa-times"></i> Отменить
+                                        заявку</a>
+                                    <a href="{% url 'order_update' order.pk %}?back_url=order_detail&back_pk={{ order.pk }}" class="btn btn-primary mr-2 text-white"><i
+                                            class="fas fa-pencil-alt"></i> Обновить</a>
+                                    <a onclick="send_post('{% url 'order_action' %}', {'action': 'delete_order', 'order_id': '{{ order.pk }}'}, 'Вы действительно хотите удалить заявку?')"
+                                       type="button" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i>
+                                        Удалить</a>
+
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- Invoice Table -->
+                        <div class="ms-invoice-table table-responsive mt-5">
+                            <table class="table table-hover text-right thead-light">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>№ зуба</th>
+                                    <th>Категория услуги</th>
+                                    <th>Услуга</th>
+                                    <th>Сумма за ед.</th>
+                                    <th>Кол-во</th>
+                                    <th>Итого</th>
+                                    <th>Действия</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in order_items %}
+                                    <tr>
+                                        <td>
+                                            {{ forloop.counter }}
+                                        </td>
+                                        <td>
+                                            {{ item.tooth }}
+                                        </td>
+                                        <td>
+                                            {{ item.service.category.name }}
+                                        </td>
+                                        <td>
+                                            {{ item.service.name }}
+                                        </td>
+                                        <td>
+                                            {{ item.price|intcomma|remove_zero }}
+                                        </td>
+                                        <td>
+                                            {{ item.count }}
+                                        </td>
+                                        <td>
+                                            {{ item.amount|intcomma|remove_zero }}
+                                        </td>
+                                        <td>
+                                            {% if order.status == 'process' %}
+                                                <a onclick="send_post('{% url 'order_action' %}', {'action': 'delete_order_item', 'item_id': '{{ item.pk }}', 'order_id': '{{ order.pk }}'}, 'Вы действительно хотите удалить эту услугу?')">
+                                                    <i class="text-danger fa fa-trash-alt"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6">Общая сумма:</td>
+                                    <td><b>{{ total_amount|intcomma|remove_zero }}</b></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="order_item_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Добавить услугу</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали услуги</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'order_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_order_item">
+                                    <input type="hidden" name="order_id" value="{{ order.pk }}">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Категория услуги</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="category"
+                                                        onchange="getServices(this)">
+                                                    <option selected disabled>Выберите категорию</option>
+                                                    {% for category in categories %}
+                                                        <option value="{{ category.pk }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom10">Услуга</label>
+                                            <div class="input-group">
+                                                <select disabled class="form-control" style="width: 100%"
+                                                        name="service_id"
+                                                        id="select_service" onchange="getPrice(this)">
+                                                    <option selected disabled>Выберите услугу</option>
+                                                    {% for service in services %}
+                                                        <option data-category-id="{{ service.category_id }}"
+                                                                data-price="{{ service.price|remove_zero }}"
+                                                                value="{{ service.pk }}">{{ service.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom16">№ зуба</label>
+                                            <div class="input-group">
+                                                <input type="text" name="tooth" class="form-control"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom16">Цена за ед.</label>
+                                            <div class="input-group">
+                                                <input type="text" name="price" onkeyup="getTotal()"
+                                                       class="form-control" id="price_input"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom16">Кол-во</label>
+                                            <div class="input-group">
+                                                <input name="count" onkeyup="getTotal()" type="text"
+                                                       class="form-control" id="count_input"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom16">Общая сумма</label>
+                                            <div class="input-group">
+                                                <input name="total" type="text" class="form-control" id="total_input"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Контент</label>
+                                            <div class="input-group">
+                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
+                                            </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block extra_js %}
+    <script>
+        function getServices(param) {
+            let select_service = $('#select_service')
+            select_service.val(0)
+            select_service.removeAttr('disabled')
+            select_service.children('option').hide();
+            select_service.children("option[value^=" + param.value + "]").show()
+            getTotal()
+        }
+
+        function getPrice(param) {
+            let price = $('#select_service').children("option[value^=" + param.value + "]").attr('data-price')
+            $('#price_input').val(price)
+            getTotal()
+        }
+
+        function getTotal() {
+            let total = $('#total_input');
+            let count = $('#count_input').val()
+            let price = $('#price_input').val();
+            total.val(price * count)
+        }
+    </script>
+{% endblock extra_js %}

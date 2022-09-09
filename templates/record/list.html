@@ -1,0 +1,156 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+    <div class="ms-panel">
+        <div class="ms-panel-header ms-panel-custome">
+            <h6>Список записей на очередь</h6>
+            <a href="#order_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+        </div>
+        <div class="ms-panel-body">
+            <div class="table-responsive">
+                <table id="record_data_table" class="table table-striped thead-primary w-100">
+                    <thead>
+                    <tr role="row">
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >№ Очереди
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Зарегистрировал
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Пациент
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Доктор
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Создано
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Дата записи
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
+                        >Действия
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for record in records %}
+                        <tr role="row">
+                            <td>{{ record.pk }}</td>
+                            <td>{{ record.registrar }}</td>
+                            <td>{{ record.patient }}</td>
+                            <td>{{ record.doctor }}</td>
+                            <td>{{ record.created }}</td>
+                            <td>{{ record.date }}</td>
+                            <td>
+                                <a href="{% url 'patient_detail' record.patient_id %}"><i
+                                        class="text-success fa fa-user-alt"></i></a>
+                                <a href="{% url 'record_update' record.pk %}"><i
+                                        class="text-primary fa fa-pencil-alt"></i></a>
+                                <a onclick="send_post('{% url 'record_action' %}', {'action': 'delete_record', 'record_id': '{{ record.pk }}'}, 'Вы действительно хотите удалить запись?')"><i
+                                        class="text-danger fa fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="order_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Добавить запись на приём</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали записи</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'record_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_record">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Пациент</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="patient_id"
+                                                        id="select_patient">
+                                                    {% for patient in patients %}
+                                                        <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Доктор</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="doctor_id"
+                                                        id="select_doctor">
+                                                    {% for doctor in doctors %}
+                                                        <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="validationCustom01">Время записи</label>
+                                            <div class="input-group">
+                                                <input type="datetime-local" name="date" class="form-control"
+                                                       id="validationCustom01"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Контент</label>
+                                            <div class="input-group">
+                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
+                                            </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#patient_data_table').DataTable()
+            $('#select_patient, #select_doctor').select2()
+        });
+
+    </script>
+{% endblock extra_js %}

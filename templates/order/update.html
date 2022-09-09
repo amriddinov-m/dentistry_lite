@@ -1,0 +1,62 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Изменить заявку</h6>
+                    </div>
+                    <form class="ms-panel-body" method="post">
+                        {% csrf_token %}
+                        {% if 'patient_detail' in request.get_full_path %}
+                            <div class="row">
+                                {% for f in form %}
+                                    {% if f.name == 'patient' %}
+                                        <div class="col-md-12 d-none">
+                                            {{ f.label_tag }}
+                                            {{ f|add_class:'form-control' }}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-12">
+                                            {{ f.label_tag }}
+                                            {{ f|add_class:'form-control' }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                {% for f in form %}
+                                    {% if f.name == 'content' %}
+                                        <div class="col-md-12">
+                                            {{ f.label_tag }}
+                                            {{ f|add_class:'form-control' }}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-6">
+                                            {{ f.label_tag }}
+                                            {{ f|add_class:'form-control' }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-sm float-right">Сохранить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+
+    </script>
+{% endblock extra_js %}

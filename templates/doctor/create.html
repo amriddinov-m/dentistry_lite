@@ -1,0 +1,54 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Добавить доктора</h6>
+                    </div>
+                    <form class="ms-panel-body" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for f in form %}
+                                {% if f.name == 'birthday' %}
+                                    <div class="col-md-4">
+                                        {{ f.label_tag }}
+                                        {{ f|add_class:'form-control'|attr:'type:date' }}
+                                    </div>
+                                {% elif f.name == 'password' %}
+                                    <div class="col-md-4">
+                                        {{ f.label_tag }}
+                                        {{ f|add_class:'form-control'|attr:'type:password' }}
+                                    </div>
+                                {% elif f.name == 'start_time' or f.name == 'end_time' %}
+                                    <div class="col-md-4">
+                                        {{ f.label_tag }}
+                                        {{ f|add_class:'form-control'|attr:'type:time' }}
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-4">
+                                        {{ f.label_tag }}
+                                        {{ f|add_class:'form-control' }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-sm float-right">Сохранить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+
+    </script>
+{% endblock extra_js %}

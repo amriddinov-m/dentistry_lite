@@ -1,0 +1,121 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список пациентов</h6>
+                        <a href="#prescription" data-toggle="modal" class="ms-text-primary">Добавить пациента</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="table-responsive">
+                            <table id="patient_data_table" class="table table-striped thead-primary w-100">
+                                <thead>
+                                <tr role="row">
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Фото
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Ф.И.О
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Телефон
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Адрес
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Дата рождения
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Дата создания
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Тип документа
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Серия документа
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Номер документа
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Зарегистрировал
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Действия
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for patient in patients %}
+                                    <tr role="row">
+                                        <td><img src="{{ patient.image }}" alt=""></td>
+                                        <td>{{ patient.fullname }}</td>
+                                        <td>{{ patient.phone }}</td>
+                                        <td>{{ patient.address }}</td>
+                                        <td>{{ patient.birthday }}</td>
+                                        <td>{{ patient.created }}</td>
+                                        <td>{{ patient.get_doc_type_display }}</td>
+                                        <td>{{ patient.doc_series }}</td>
+                                        <td>{{ patient.doc_number }}</td>
+                                        <td>{{ patient.registrar }}</td>
+                                        <td>
+                                            <a href="{% url 'patient_update' patient.pk %}">
+                                                <i class="text-primary fa fa-pencil-alt"></i>
+                                            </a>
+                                            <a onclick="send_post('{% url 'patient_action' %}', {'action': 'delete_patient', 'patient_id': '{{ patient.pk }}'}, 'Вы действительно хотите удалить пациента?')">
+                                                <i class="text-danger fa fa-trash-alt"></i>
+                                            </a>
+                                            <a href="{% url 'patient_detail' patient.pk %}">
+                                                <i class="text-success fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#patient_data_table').DataTable()
+        });
+
+        function patient_delete_modal_show(patient_id, patient_fullname) {
+            $('#PatientDeleteModal').modal('toggle');
+        }
+    </script>
+{% endblock extra_js %}
