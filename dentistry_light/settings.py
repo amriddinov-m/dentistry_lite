@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'dentistry_light.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dentistry_light_db',
+        'NAME': 'dentistry_lite_db',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': '127.0.0.1',
