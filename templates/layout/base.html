@@ -579,7 +579,7 @@
                                   method="post">
                                 <input type="hidden" name="action" value="create_patient">
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="validationCustom09">Ф.И.О пациента</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="validationCustom09"
@@ -587,10 +587,19 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="validationCustom10">Дата рождения</label>
                                         <div class="input-group">
                                             <input type="date" class="form-control" name="birthday"
+                                                   id="validationCustom10"
+                                                   required="">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationCustom10">Дата последнего визита стоматолога</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control" name="last_visit"
                                                    id="validationCustom10"
                                                    required="">
 
