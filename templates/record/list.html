@@ -50,8 +50,8 @@
                     <tbody>
                     {% for record in records %}
                         <tr role="row">
-                            <td>{{ record.pk }}</td>
-                            <td>{{ record.registrar }}</td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ record.registrar.username }}</td>
                             <td>{{ record.patient }}</td>
                             <td>{{ record.doctor }}</td>
                             <td>{{ record.created }}</td>

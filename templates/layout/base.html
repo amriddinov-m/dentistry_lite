@@ -33,7 +33,7 @@
     {% endblock extra_css %}
 </head>
 
-<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
+<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar" onload="startClock()">
 <!-- Setting Panel -->
 <div class="ms-toggler ms-settings-toggle ms-d-block-lg">
     <i class="flaticon-gear"></i>
@@ -312,7 +312,7 @@
 
             <li class="ms-nav-item  ms-d-none">
                 <a href="#order_create" class="text-white" data-toggle="modal"><i class="flaticon-spreadsheet mr-2"></i>
-                    Записать на очередь
+                    Записать в очередь
                 </a>
             </li>
 
@@ -970,6 +970,45 @@
 
 
     }
+
+    const startClock = () => {
+        const now = new Date();
+        const h = padWithZeroes(now.getHours(), 2);
+        const m = padWithZeroes(now.getMinutes(), 2);
+        let current_time = `${h}:${m}`
+        send_message(current_time)
+        setTimeout(startClock, 60000);
+    };
+
+    const padWithZeroes = (input, length) => {
+        let padded = input;
+        if (typeof input !== "string") padded = input.toString();
+        return padded.padStart(length, "0");
+    };
+    let getDate = (string) => new Date(0, 0, 0, string.split(':')[0], string.split(':')[1]);
+
+    function send_message(current_time) {
+        let record_arr = []
+        {% for record in records_today %}
+            record_arr.push(`{{ record.date|date:'H:i' }}`)
+        {% endfor %}
+
+        for (let index in record_arr) {
+            let record_time = record_arr[index]
+            let date_unix = (getDate(record_time) - getDate(current_time));
+            let hours = Math.floor((date_unix % 86400000) / 3600000);
+            let minutes = Math.round(((date_unix % 86400000) % 3600000) / 60000);
+            let result = hours + ':' + minutes + ':00';
+            let a = result.split(':');
+            let seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+            console.log(seconds)
+            if (seconds < 3600) {
+
+            }
+        }
+    }
+
+
 </script>
 
 </body>

@@ -87,7 +87,7 @@ class RecordListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(RecordListView, self).get_context_data(**kwargs)
-        context['records'] = Record.objects.all()
+        context['records'] = Record.objects.order_by('date')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role='doctor')
         return context
@@ -103,7 +103,7 @@ class RecordUpdateView(UpdateView):
 
     def get_initial(self):
         initial = super(RecordUpdateView, self).get_initial()
-        initial['date'] = self.model.objects.get().date.strftime('%Y-%m-%d %H:%M:%S')
+        initial['date'] = self.model.objects.get(id=self.kwargs['pk']).date.strftime('%Y-%m-%dT%H:%M:%S')
         return initial
 
 
