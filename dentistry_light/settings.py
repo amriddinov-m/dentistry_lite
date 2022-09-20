@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'service',
     'user',
     'widget_tweaks',
+    'bot',
 ]
 
 MIDDLEWARE = [

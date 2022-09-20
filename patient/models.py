@@ -27,6 +27,7 @@ class Patient(models.Model):
     doc_series = models.CharField(verbose_name='Серия документа', max_length=255)
     doc_number = models.CharField(verbose_name='Номер документа', max_length=7)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
+    chat_id = models.BigIntegerField(verbose_name='Телеграм айди', default=0)
     registrar = models.ForeignKey('user.User',
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
