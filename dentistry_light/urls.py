@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.views.generic.base import TemplateView
 
 from dentistry_light import settings
 
@@ -26,5 +27,8 @@ urlpatterns = [
     path('', include('patient.urls')),
     path('', include('service.urls')),
     path('', include('user.urls')),
+    path(".well-known/pki-validation/148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt",
+         TemplateView.as_view(template_name="148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt", content_type="text/plain"),
+         ),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
