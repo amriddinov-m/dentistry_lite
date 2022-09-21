@@ -12,7 +12,6 @@ urlpatterns = [
     path('doctor/update/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_update'),
     path('login/', LoginView.as_view(), name="login-view"),
     path(".well-known/pki-validation/148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt",
-         TemplateView.as_view(template_name="148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt", content_type="text/plain"),
-         name='ssl_fl'),
+         TemplateView.as_view(template_name="ssl_files.html", content_type="text/plain")),
 
 ]
