@@ -27,7 +27,7 @@ urlpatterns = [
     path('', include('patient.urls')),
     path('', include('service.urls')),
     path('', include('user.urls')),
-    path(".well-known/pki-validation/CF8B5A1C25D9D067BD240A5CD5BF5938.txt",
+    path(".well-known/pki-validation/148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt",
          TemplateView.as_view(template_name="148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt", content_type="text/plain"),
     ),
 ]
