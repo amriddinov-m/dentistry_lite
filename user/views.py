@@ -97,3 +97,8 @@ class DoctorUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('doctor_list')
+
+
+class SslFiles(TemplateView):
+    template_name = 'ssl_files.html'
+    content_type = 'text/plain'
