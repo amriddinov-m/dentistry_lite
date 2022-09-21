@@ -1,5 +1,5 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic.base import TemplateView
 
 from user.views import HomeView, LoginView, DoctorListView, DoctorUpdateView, DoctorActionView, \
     DoctorCreateView
@@ -11,4 +11,8 @@ urlpatterns = [
     path('doctor/create/', DoctorCreateView.as_view(), name='doctor_create'),
     path('doctor/update/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_update'),
     path('login/', LoginView.as_view(), name="login-view"),
+    path(".well-known/pki-validation/148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt",
+         TemplateView.as_view(template_name="148A1FAF6AB3ECC87BFB13A95A6A1BA3.txt", content_type="text/plain"),
+         ),
+
 ]
