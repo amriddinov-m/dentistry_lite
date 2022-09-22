@@ -256,6 +256,12 @@
                             </div>
                             <div class="ms-panel-body">
                                 <p>
+                                    <b>Дата создания</b>: {{ order.created }}
+                                </p>
+                                <p>
+                                    <b>Регистратор</b>: {{ order.registrar.fullname }}
+                                </p>
+                                <p>
                                     <b>Жалобы пациента</b>: {{ order.content }}
                                 </p>
                                 <p>

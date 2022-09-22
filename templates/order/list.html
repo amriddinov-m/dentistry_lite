@@ -51,11 +51,11 @@
                     {% for order in orders %}
                         <tr role="row">
                             <td>{{ order.pk }}</td>
-                            <td>{{ order.registrar }}</td>
+                            <td>{{ order.registrar.fullname }}</td>
                             <td>{{ order.patient }}</td>
                             <td>{{ order.doctor }}</td>
-                            <td>{{ patient.created }}</td>
-                            <td>{{ patient.status }}</td>
+                            <td>{{ order.created }}</td>
+                            <td>{{ order.get_status_display }}</td>
                             <td>
                                 <a href="{% url 'order_detail' order.pk %}"><i
                                         class="text-success fa fa-eye"></i></a>

@@ -7,7 +7,8 @@ def create_order(post_request, user):
     patient_id = post_request.get('patient')
     doctor_id = post_request.get('doctor')
     content = post_request.get('content')
-    order = Order.objects.create(patient_id=patient_id, doctor_id=doctor_id, content=content, registrar=user)
+    diagnosis = post_request.get('diagnosis')
+    order = Order.objects.create(patient_id=patient_id, doctor_id=doctor_id, content=content, registrar=user, diagnosis=diagnosis)
     return dict({'back_url': reverse('order_detail', kwargs={'pk': order.pk}),
                  'data': ''})
 
