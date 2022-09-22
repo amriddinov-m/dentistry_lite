@@ -112,7 +112,7 @@
                 <span><i class="fas fa-list-alt"></i>Заявки</span>
             </a>
             <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-                {% if request.role.user != 'doctor' %}
+                {% if request.user.role != 'doctor' %}
                     <li><a href="#order_create" data-toggle="modal">Добавить заявку</a></li>
                 {% endif %}
                 <li><a href="{% url 'order_list' %}">Список завок</a></li>
@@ -126,12 +126,13 @@
                 <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>
             </a>
             <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">
-                {% if request.role.user != 'doctor' %}
+                {% if request.user.role != 'doctor' %}
                     <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
                 {% endif %}
                 <li><a href="{% url 'record_list' %}">Список записей</a></li>
             </ul>
         </li>
+        {% if request.user.role != 'doctor' %}
         <!-- Settings -->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#settings" aria-expanded="false"
@@ -145,6 +146,7 @@
             </ul>
         </li>
         <!-- Settings -->
+        {% endif %}
         <!-- /Schedule -->
         <li class="menu-item">
             <hr>

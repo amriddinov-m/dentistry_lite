@@ -52,59 +52,60 @@
         <div class="row">
             <!-- Notifications Widgets -->
 
-            <div class="col-xl-3 col-md-6 col-sm-6">
-                <a href="{% url 'doctor_list' %}">
-                    <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                        <div class="ms-card-body media">
-                            <div class="media-body">
-                                <h6>Докторов</h6>
-                                <p class="ms-card-change"> {{ doctors.count }}</p>
+            {% if request.user.role == 'admin' %}
+                <div class="col-xl-3 col-md-6 col-sm-6">
+                    <a href="{% url 'doctor_list' %}">
+                        <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                            <div class="ms-card-body media">
+                                <div class="media-body">
+                                    <h6>Докторов</h6>
+                                    <p class="ms-card-change"> {{ doctors.count }}</p>
+                                </div>
                             </div>
+                            <i class="fas fa-stethoscope ms-icon-mr"></i>
                         </div>
-                        <i class="fas fa-stethoscope ms-icon-mr"></i>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-md-6 col-sm-6">
-                <a href="{% url 'patient_list' %}">
-                    <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                        <div class="ms-card-body media">
-                            <div class="media-body">
-                                <h6>Пациентов</h6>
-                                <p class="ms-card-change"> {{ patients.count }}</p>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6 col-sm-6">
+                    <a href="{% url 'patient_list' %}">
+                        <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                            <div class="ms-card-body media">
+                                <div class="media-body">
+                                    <h6>Пациентов</h6>
+                                    <p class="ms-card-change"> {{ patients.count }}</p>
+                                </div>
                             </div>
+                            <i class="fas fa-user-plus ms-icon-mr"></i>
                         </div>
-                        <i class="fas fa-user-plus ms-icon-mr"></i>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-md-6 col-sm-6">
-                <a href="{% url 'order_list' %}">
-                    <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                        <div class="ms-card-body media">
-                            <div class="media-body">
-                                <h6 class="bold">Заявок</h6>
-                                <p class="ms-card-change"> {{ orders.count }}</p>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6 col-sm-6">
+                    <a href="{% url 'order_list' %}">
+                        <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                            <div class="ms-card-body media">
+                                <div class="media-body">
+                                    <h6 class="bold">Заявок</h6>
+                                    <p class="ms-card-change"> {{ orders.count }}</p>
+                                </div>
                             </div>
+                            <i class="fa fa-wheelchair ms-icon-mr"></i>
                         </div>
-                        <i class="fa fa-wheelchair ms-icon-mr"></i>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-md-6 col-sm-6">
-                <a href="{% url 'record_list' %}">
-                    <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                        <div class="ms-card-body media">
-                            <div class="media-body">
-                                <h6 class="bold">Записей</h6>
-                                <p class="ms-card-change"> {{ records.count }}</p>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6 col-sm-6">
+                    <a href="{% url 'record_list' %}">
+                        <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                            <div class="ms-card-body media">
+                                <div class="media-body">
+                                    <h6 class="bold">Записей</h6>
+                                    <p class="ms-card-change"> {{ records.count }}</p>
+                                </div>
                             </div>
+                            <i class="fas fa-calendar ms-icon-mr"></i>
                         </div>
-                        <i class="fas fa-calendar ms-icon-mr"></i>
-                    </div>
-                </a>
-            </div>
-
+                    </a>
+                </div>
+            {% endif %}
 
             <div class="col-xl-12 col-lg-6 col-md-12">
                 <div class="ms-panel ms-panel-fh">

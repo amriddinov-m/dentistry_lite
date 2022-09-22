@@ -44,8 +44,14 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['records'] = Record.objects.all()
         context['patients'] = Patient.objects.all()
+        role = self.request.user.role
+        filter_dict = {}
+        if role == 'doctor':
+            filter_dict['doctor'] = self.request.user.id
+
+        context['records'] = Record.objects.filter(**filter_dict)
+
         context['doctors'] = User.objects.filter(role='doctor')
         context['orders'] = Order.objects.all()
 
