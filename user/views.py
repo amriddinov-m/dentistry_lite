@@ -101,4 +101,3 @@ class DoctorUpdateView(UpdateView):
 
 class SslFiles(TemplateView):
     template_name = 'ssl_files.html'
-    content_type = 'text/plain'
