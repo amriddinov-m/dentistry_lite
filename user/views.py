@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView, CreateView
 
 from order.models import Order
+from patient.logic import get_records, send_message_to_tg
 from patient.models import Record, Patient
 from user.forms import LoginForm
 from user.logic import delete_doctor, update_status_doctor
@@ -28,9 +29,13 @@ class DoctorActionView(View):
         actions = {
             'update_status_doctor': update_status_doctor,
             'delete_doctor': delete_doctor,
+            'get_records': get_records,
+            'send_message_to_tg': send_message_to_tg,
         }
         response = actions[action](post_request, user)
         back_url = response['back_url']
+        if action == 'get_records' or action == 'send_message_to_tg':
+            return JsonResponse(response, safe=True)
         return redirect(back_url)
 
 

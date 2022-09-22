@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -7,7 +8,7 @@ from django.views.generic import TemplateView, UpdateView
 
 from order.models import Order
 from patient.forms import PatientForm
-from patient.logic import create_patient, delete_patient, create_record, delete_record
+from patient.logic import create_patient, delete_patient, create_record, delete_record, send_message_to_tg, get_records
 from patient.models import Patient, Record
 from user.models import User
 
@@ -46,6 +47,7 @@ class RecordActionView(View):
         actions = {
             'create_record': create_record,
             'delete_record': delete_record,
+
         }
         response = actions[action](post_request, user)
         back_url = response['back_url']

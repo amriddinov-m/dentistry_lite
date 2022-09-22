@@ -605,7 +605,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-2">
+                                    <div class="col-md-4 mb-2">
                                         <label for="validationCustom11">Адрес</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="validationCustom11"
@@ -613,11 +613,22 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="validationCustom12">Номер телефона</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="validationCustom12"
                                                    placeholder="Введите номер телефона" name="phone" required="">
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationCustom12">Пол</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="gender" required>
+                                                <option value="male">Мужчина</option>
+                                                <option value="female">Женщина</option>
+                                            </select>
 
                                         </div>
 
@@ -967,8 +978,26 @@
                     alert('Error')
                 })
         }
+    }
 
+    async function get_records(url, data) {
+        let form_data = new FormData();
+        for (let key in data) {
+            form_data.append(key, data[key]);
+        }
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                cache: "no-cache",
+                body: form_data
+            }
+        )
+            .then(response => {
+                return response.json();
+            })
+            .then((response_data) => {
 
+            })
     }
 
     const startClock = () => {
@@ -976,8 +1005,8 @@
         const h = padWithZeroes(now.getHours(), 2);
         const m = padWithZeroes(now.getMinutes(), 2);
         let current_time = `${h}:${m}`
-        send_message(current_time)
-        setTimeout(startClock, 60000);
+        check_record_time(current_time)
+        setTimeout(startClock, 30000);
     };
 
     const padWithZeroes = (input, length) => {
@@ -987,14 +1016,62 @@
     };
     let getDate = (string) => new Date(0, 0, 0, string.split(':')[0], string.split(':')[1]);
 
-    function send_message(current_time) {
+    async function send_message_to_tg(url, data) {
+        let form_data = new FormData();
+        for (let key in data) {
+            form_data.append(key, data[key]);
+        }
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                cache: "no-cache",
+                body: form_data
+            }
+        )
+            .then(response => {
+                return response.json();
+            })
+            .then((response_data) => {
+                console.log(response_data)
+            })
+    }
+
+
+    async function check_record_time(current_time) {
         let record_arr = []
-        {% for record in records_today %}
-            record_arr.push(`{{ record.date|date:'H:i' }}`)
-        {% endfor %}
+        let url = '{% url 'doctor_action' %}'
+        let data = {
+            'action': 'get_records',
+            'back_url': 'home-view',
+        }
+        let form_data = new FormData();
+        for (let key in data) {
+            form_data.append(key, data[key]);
+        }
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                cache: "no-cache",
+                body: form_data
+            }
+        )
+            .then(response => {
+                return response.json();
+            })
+            .then((response_data) => {
+                for (let key in response_data['results']) {
+                    record_arr.push({
+                            'id': response_data['results'][key]['id'],
+                            'date': response_data['results'][key]['date'],
+                        }
+                    )
+                }
+            })
+        console.log(record_arr)
 
         for (let index in record_arr) {
-            let record_time = record_arr[index]
+            let record_time = record_arr[index]['date']
+            let record_id = record_arr[index]['id']
             let date_unix = (getDate(record_time) - getDate(current_time));
             let hours = Math.floor((date_unix % 86400000) / 3600000);
             let minutes = Math.round(((date_unix % 86400000) % 3600000) / 60000);
@@ -1002,8 +1079,13 @@
             let a = result.split(':');
             let seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
             console.log(seconds)
-            if (seconds < 3600) {
-
+            if (seconds <= 3600) {
+                await send_message_to_tg('{% url 'doctor_action' %}',
+                    {
+                        'action': 'send_message_to_tg',
+                        'record_id': record_id,
+                        'back_url': 'home-view'
+                    })
             }
         }
     }

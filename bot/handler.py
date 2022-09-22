@@ -20,7 +20,12 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(content_types=types.ContentTypes.CONTACT, state=PatientState.contact)
 async def search_patient_by_contact(message: types.Message, state: FSMContext):
     contact = message.contact.phone_number
+    if not contact.startswith('+'):
+        contact = f'+{contact}'
+
     patient = Patient.objects.filter(phone=contact)
+    print(contact)
+    print(patient)
     if patient:
         await message.answer('✅ Ваш аккаунт успешно прошёл идентификацию!', reply_markup=types.ReplyKeyboardRemove())
         patient.update(chat_id=message.chat.id)

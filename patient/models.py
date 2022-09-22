@@ -55,6 +55,7 @@ class Record(models.Model):
                                   related_name='registrar',
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
+    sent = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.patient} | {self.doctor} | {self.date}'
