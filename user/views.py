@@ -35,7 +35,7 @@ class DoctorActionView(View):
 
 
 class HomeView(TemplateView):
-    template_name = 'ssl_files.html'
+    template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -101,3 +101,4 @@ class DoctorUpdateView(UpdateView):
 
 class SslFiles(TemplateView):
     template_name = 'ssl_files.html'
+    content_type = 'text/plain'
