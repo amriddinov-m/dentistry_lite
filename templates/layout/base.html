@@ -91,19 +91,20 @@
             </a>
         </li>
         <!-- /Dashboard -->
-
-        <!-- Patient -->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#patient" aria-expanded="false"
-               aria-controls="patient">
-                <span><i class="fas fa-user"></i>Пациенты</span>
-            </a>
-            <ul id="patient" class="collapse" aria-labelledby="patient" data-parent="#side-nav-accordion">
-                <li><a href="#prescription" data-toggle="modal">Добавить пациента</a></li>
-                <li><a href="{% url 'patient_list' %}">Список пациентов</a></li>
-            </ul>
-        </li>
-        <!-- /Patient -->
+        {% if request.user.role != 'doctor' %}
+            <!-- Patient -->
+            <li class="menu-item">
+                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#patient" aria-expanded="false"
+                   aria-controls="patient">
+                    <span><i class="fas fa-user"></i>Пациенты</span>
+                </a>
+                <ul id="patient" class="collapse" aria-labelledby="patient" data-parent="#side-nav-accordion">
+                    <li><a href="#prescription" data-toggle="modal">Добавить пациента</a></li>
+                    <li><a href="{% url 'patient_list' %}">Список пациентов</a></li>
+                </ul>
+            </li>
+            <!-- /Patient -->
+        {% endif %}
         <!-- Schedule -->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#schedule" aria-expanded="false"
@@ -111,7 +112,9 @@
                 <span><i class="fas fa-list-alt"></i>Заявки</span>
             </a>
             <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-                <li><a href="#order_create" data-toggle="modal">Добавить заявку</a></li>
+                {% if request.role.user != 'doctor' %}
+                    <li><a href="#order_create" data-toggle="modal">Добавить заявку</a></li>
+                {% endif %}
                 <li><a href="{% url 'order_list' %}">Список завок</a></li>
             </ul>
         </li>
@@ -123,7 +126,9 @@
                 <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>
             </a>
             <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">
-                <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
+                {% if request.role.user != 'doctor' %}
+                    <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
+                {% endif %}
                 <li><a href="{% url 'record_list' %}">Список записей</a></li>
             </ul>
         </li>
@@ -149,152 +154,6 @@
 
     </ul>
 </aside>
-<!-- Sidebar Right -->
-<aside id="ms-recent-activity" class="side-nav fixed ms-aside-right ms-scrollable">
-    <div class="ms-aside-header">
-        <ul class="nav nav-tabs tabs-bordered d-flex nav-justified mb-3" role="tablist">
-            <li role="presentation" class="fs-12"><a href="#activityLog" aria-controls="activityLog" class="active"
-                                                     role="tab" data-toggle="tab"> Activity Log</a></li>
-            <li role="presentation" class="fs-12"><a href="#recentPosts" aria-controls="recentPosts" role="tab"
-                                                     data-toggle="tab"> Settings </a></li>
-            <li>
-                <button type="button" class="close ms-toggler text-center" data-target="#ms-recent-activity"
-                        data-toggle="slideRight"><span aria-hidden="true">&times;</span></button>
-            </li>
-        </ul>
-    </div>
-    <div class="ms-aside-body">
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active fade show" id="activityLog">
-                <ul class="ms-activity-log">
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-light">
-                            <i class="flaticon-gear"></i>
-                        </div>
-                        <h6>Update 1.0.0 Pushed</h6>
-                        <span> <i class="material-icons">event</i>1 January, 2019</span>
-                        <p class="fs-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
-                            diam non nisi semper, ula in sodales vehicula....</p>
-                    </li>
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-success">
-                            <i class="flaticon-tick-inside-circle"></i>
-                        </div>
-                        <h6>Profile Updated</h6>
-                        <span> <i class="material-icons">event</i>4 March, 2018</span>
-                        <p class="fs-14">Curabitur purus sem, malesuada eu luctus eget, suscipit sed turpis. Nam
-                            pellentesque felis vitae justo accumsan, sed semper nisi sollicitudin...</p>
-                    </li>
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-warning">
-                            <i class="flaticon-alert-1"></i>
-                        </div>
-                        <h6>Your payment is due</h6>
-                        <span> <i class="material-icons">event</i>1 January, 2019</span>
-                        <p class="fs-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
-                            diam non nisi semper, ula in sodales vehicula....</p>
-                    </li>
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-danger">
-                            <i class="flaticon-alert"></i>
-                        </div>
-                        <h6>Database Error</h6>
-                        <span> <i class="material-icons">event</i>4 March, 2018</span>
-                        <p class="fs-14">Curabitur purus sem, malesuada eu luctus eget, suscipit sed turpis. Nam
-                            pellentesque felis vitae justo accumsan, sed semper nisi sollicitudin...</p>
-                    </li>
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-info">
-                            <i class="flaticon-information"></i>
-                        </div>
-                        <h6>Checkout what's Trending</h6>
-                        <span> <i class="material-icons">event</i>1 January, 2019</span>
-                        <p class="fs-14">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
-                            diam non nisi semper, ula in sodales vehicula....</p>
-                    </li>
-                    <li>
-                        <div class="ms-btn-icon btn-pill icon btn-secondary">
-                            <i class="flaticon-diamond"></i>
-                        </div>
-                        <h6>Your Dashboard is ready</h6>
-                        <span> <i class="material-icons">event</i>4 March, 2018</span>
-                        <p class="fs-14">Curabitur purus sem, malesuada eu luctus eget, suscipit sed turpis. Nam
-                            pellentesque felis vitae justo accumsan, sed semper nisi sollicitudin...</p>
-                    </li>
-                </ul>
-                <a href="#" class="btn btn-primary d-block"> View All </a>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="recentPosts">
-                <h6>General Settings</h6>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Location Tracking</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Allow Notifications</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Allow Popups</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox" checked="">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <h6>Log Settings</h6>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Enable Logging</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox" checked="">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Audit Logs</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Error Logs</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox" checked="">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <h6>Advanced Settings</h6>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Enable Logging</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox" checked="">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Audit Logs</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-                <div class="ms-form-group">
-                    <span class="ms-option-name fs-14">Error Logs</span>
-                    <label class="ms-switch float-right">
-                        <input type="checkbox" checked="">
-                        <span class="ms-switch-slider round"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-</aside>
 <!-- Main Content -->
 <main class="body-content">
     <!-- Navigation Bar -->
@@ -310,22 +169,19 @@
         </div>
         <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
 
-            <li class="ms-nav-item  ms-d-none">
-                <a href="#record_create" class="text-white" data-toggle="modal"><i class="flaticon-spreadsheet mr-2"></i>
-                    Записать в очередь
-                </a>
-            </li>
+            {% if request.user.role != 'doctor' %}
+                <li class="ms-nav-item  ms-d-none">
+                    <a href="#record_create" class="text-white" data-toggle="modal"><i
+                            class="flaticon-spreadsheet mr-2"></i>
+                        Записать в очередь
+                    </a>
+                </li>
 
-            <li class="ms-nav-item ms-d-none">
-                <a href="#prescription" class="text-white" data-toggle="modal"><i class="flaticon-pencil mr-2"></i>
-                    Зарегистрировать пациента</a>
-            </li>
-
-            <li class="ms-nav-item ms-d-none">
-                <a href="#report1" class="text-white" data-toggle="modal"><i class="flaticon-list mr-2"></i>
-                    Получить отчёт
-                </a>
-            </li>
+                <li class="ms-nav-item ms-d-none">
+                    <a href="#prescription" class="text-white" data-toggle="modal"><i class="flaticon-pencil mr-2"></i>
+                        Зарегистрировать пациента</a>
+                </li>
+            {% endif %}
 
             <li class="ms-nav-item ms-nav-user dropdown">
                 <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <img
