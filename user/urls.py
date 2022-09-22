@@ -9,6 +9,4 @@ urlpatterns = [
     path('doctor/create/', DoctorCreateView.as_view(), name='doctor_create'),
     path('doctor/update/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_update'),
     path('login/', LoginView.as_view(), name="login-view"),
-    path('well-known/', SslFiles.as_view()),
-
 ]
