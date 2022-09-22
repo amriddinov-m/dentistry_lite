@@ -111,7 +111,7 @@
                 <span><i class="fas fa-list-alt"></i>Заявки</span>
             </a>
             <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-                <li><a href="#mymodal" data-toggle="modal">Добавить заявку</a></li>
+                <li><a href="#order_create" data-toggle="modal">Добавить заявку</a></li>
                 <li><a href="{% url 'order_list' %}">Список завок</a></li>
             </ul>
         </li>
@@ -123,7 +123,7 @@
                 <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>
             </a>
             <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">
-                <li><a href="#order_create" data-toggle="modal">Добавить запись</a></li>
+                <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
                 <li><a href="{% url 'record_list' %}">Список записей</a></li>
             </ul>
         </li>
@@ -311,7 +311,7 @@
         <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
 
             <li class="ms-nav-item  ms-d-none">
-                <a href="#order_create" class="text-white" data-toggle="modal"><i class="flaticon-spreadsheet mr-2"></i>
+                <a href="#record_create" class="text-white" data-toggle="modal"><i class="flaticon-spreadsheet mr-2"></i>
                     Записать в очередь
                 </a>
             </li>
@@ -734,7 +734,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="order_create" role="dialog" aria-hidden="true">
+<div class="modal fade" id="record_create" role="dialog" aria-hidden="true">
     <div class="modal-dialog ms-modal-dialog-width">
         <div class="modal-content ms-modal-content-width">
             <div class="modal-header  ms-modal-header-radius-0">
@@ -807,11 +807,11 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="report1" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="order_create" role="dialog" aria-hidden="true">
     <div class="modal-dialog ms-modal-dialog-width">
         <div class="modal-content ms-modal-content-width">
             <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Generate report</h4>
+                <h4 class="modal-title text-white">Создать заявку</h4>
                 <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
 
             </div>
@@ -819,83 +819,52 @@
                 <div class="col-xl-12 col-md-12">
                     <div class="ms-panel ms-panel-bshadow-none">
                         <div class="ms-panel-header">
-                            <h6>Patient Information</h6>
+                            <h6>Детали заявки</h6>
                         </div>
                         <div class="ms-panel-body">
-                            <form class="needs-validation" novalidate="">
+                            <form class="needs-validation" novalidate="" action="{% url 'order_action' %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="create_order">
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom16">Patient Name</label>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom09">Пациент</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom16"
-                                                   placeholder="Enter Name" required="">
-
+                                            <select class="form-control" style="width: 100%" name="patient"
+                                                    id="select_patient">
+                                                {% for patient in patients %}
+                                                    <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom17">Date Of Birth</label>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom10">Доктор</label>
                                         <div class="input-group">
-                                            <input type="number" class="form-control" id="validationCustom17"
-                                                   required="">
-
+                                            <select class="form-control" style="width: 100%" name="doctor"
+                                                    id="select_doctor">
+                                                {% for doctor in doctors %}
+                                                    <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 mb-2">
-                                        <label for="validationCustom22">Address</label>
+                                    <div class="col-md-12 mb-2">
+                                        <label for="validationCustom11">Жалобы</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom22"
-                                                   placeholder="Add Address" required="">
-
+                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
+                                            </textarea>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom18">Phone no.</label>
+                                    <div class="col-md-12 mb-2">
+                                        <label for="validationCustom11">Диагноз</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom18"
-                                                   placeholder="Enter Phone No." required="">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom19">Report Type</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom19"
-                                                   placeholder="Diseases Report" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom23">Report Period</label>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="validationCustom23"
-                                                   placeholder="" required="">
-
+                                            <textarea class="form-control" name="diagnosis" id="" cols="30" rows="10">
+                                            </textarea>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="form-row">
-
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom20">Appointment With</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom20"
-                                                   placeholder="Enter Doctor Name" required="">
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <button class="btn btn-warning mt-4 d-inline w-20" type="submit">Generate Report
-                                </button>
-                                <button class="btn btn-primary mt-4 d-inline w-20" type="submit">Generate & Print
-                                </button>
+                                <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
                             </form>
                         </div>
 

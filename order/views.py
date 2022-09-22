@@ -65,6 +65,33 @@ class OrderDetailView(TemplateView):
         return context
 
 
+class OrderReportView(TemplateView):
+    template_name = 'order/report.html'
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(OrderReportView, self).get_context_data(**kwargs)
+        tooth = self.request.GET.get('tooth')
+        order_items = OrderItem.objects.filter(tooth=tooth, order__status='done', order__patient_id=pk)
+        context['order_items'] = order_items
+        context['patient'] = Patient.objects.get(pk=pk)
+        context['tooth'] = tooth
+        context['total_amount'] = order_items.aggregate(total=Sum('amount'))['total'] or 0
+        return context
+
+
+class OrderPrintView(TemplateView):
+    template_name = 'order/print.html'
+
+    def get_context_data(self, pk, **kwargs):
+        context = super(OrderPrintView, self).get_context_data(**kwargs)
+        order_items = OrderItem.objects.filter(order=pk)
+        context['order'] = Order.objects.get(id=pk)
+        context['order_items'] = order_items
+        context['total_amount'] = order_items.aggregate(total=Sum('amount'))['total'] or 0
+
+        return context
+
+
 class OrderUpdateView(UpdateView):
     template_name = 'order/update.html'
     model = Order

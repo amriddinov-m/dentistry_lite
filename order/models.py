@@ -17,7 +17,9 @@ class Order(models.Model):
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     updated = models.DateTimeField('Дата обновления', auto_now=True)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.process)
-    content = models.TextField(verbose_name='Контент', null=True)
+    content = models.TextField(verbose_name='Жалобы', null=True)
+    diagnosis = models.TextField(verbose_name='Диагноз', null=True)
+    inspection = models.TextField(verbose_name='Осмотр', null=True)
     registrar = models.ForeignKey('user.User',
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
