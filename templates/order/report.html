@@ -1,85 +1,97 @@
 {% extends 'layout/base.html' %}
+{% load static humanize poll_extras %}
 {% block content %}
+    <!-- Invoice Table -->
     <div class="ms-panel">
-        <div class="ms-panel-header ms-panel-custome">
-            <h6>Список открытых заявок</h6>
-            <a href="#order_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
-        </div>
-        <div class="ms-panel-body">
+    <div class="ms-panel-header ms-panel-custome">
+        <h6>Отчёт на зуб №{{ tooth }} || Пациент: {{ patient.fullname }}</h6>
+    </div>
+    <div class="ms-panel-body">
+        <div class="ms-invoice-table table-responsive mt-5">
             <div class="table-responsive">
-                <table id="patient_data_table" class="table table-striped thead-primary w-100">
+                <table id="order_report_table" class="table table-striped thead-primary w-100">
                     <thead>
                     <tr role="row">
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >№ Заявки
+                        >#
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Открыл
+                        >№ зуба
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Пациент
+                        >Категория услуги
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Доктор
+                        >Услуга
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Дата открытия
+                        >Сумма за ед.
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Статус
+                        >Кол-во
                         </th>
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
-                        >Действия
+                        >Итого
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for order in orders %}
+                    {% for item in order_items %}
                         <tr role="row">
-                            <td>{{ order.pk }}</td>
-                            <td>{{ order.registrar }}</td>
-                            <td>{{ order.patient }}</td>
-                            <td>{{ order.doctor }}</td>
-                            <td>{{ patient.created }}</td>
-                            <td>{{ patient.status }}</td>
                             <td>
-                                <a href="{% url 'order_detail' order.pk %}"><i
-                                        class="text-success fa fa-eye"></i></a>
-                                <a href="{% url 'order_update' order.pk %}?back_url=order_list"><i
-                                        class="text-primary fa fa-pencil-alt"></i></a>
-                                <a onclick="return confirm('Вы дейсвительно хотите удалить?')"
-                                   href="{% url 'order_action' %}"><i
-                                        class="text-danger fa fa-trash-alt"></i></a>
+                                {{ forloop.counter }}
                             </td>
+                            <td>
+                                {{ item.tooth }}
+                            </td>
+                            <td>
+                                {{ item.service.category.name }}
+                            </td>
+                            <td>
+                                {{ item.service.name }}
+                            </td>
+                            <td>
+                                {{ item.price|intcomma|remove_zero }}
+                            </td>
+                            <td>
+                                {{ item.count }}
+                            </td>
+                            <td>
+                                {{ item.amount|intcomma|remove_zero }}
+                            </td>
+
                         </tr>
                     {% endfor %}
                     </tbody>
+                    <tfoot>
+                        <tr role="row">
+                            <td colspan="6">Общая сумма:</td>
+                            <td><b>{{ total_amount|intcomma|remove_zero }}</b></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
     </div>
-
-
 {% endblock content %}
 {% block extra_js %}
     <script>
         $(document).ready(function () {
-            $('#patient_data_table').DataTable()
-            $('#select_patient, #select_doctor').select2()
+            $('#order_report_table').DataTable()
         });
 
     </script>

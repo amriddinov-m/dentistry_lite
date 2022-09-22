@@ -10,7 +10,7 @@
                             <h6>Заявка №{{ order.pk }}</h6>
                             <h6>
                                 <span
-                                    class="badge badge-{% if order.status == 'process' %}primary{% elif order.status == 'done' %}success{% else %}danger{% endif %}">{{ order.get_status_display }}</span>
+                                        class="badge badge-{% if order.status == 'process' %}primary{% elif order.status == 'done' %}success{% else %}danger{% endif %}">{{ order.get_status_display }}</span>
                             </h6>
                         </div>
                     </div>
@@ -47,19 +47,25 @@
                         <div class="row">
                             <div class="invoice-buttons text-left">
 
-                                <a href="#" class="btn btn-success mr-2"><i class="fas fa-print"></i>
+                                <a onclick="printReport()" class="btn btn-success mr-2 text-white"><i
+                                        class="fas fa-print"></i>
                                     Распечатать</a>
+                                <a href="#order_details" data-toggle="modal" class="btn btn-secondary mr-2"><i
+                                        class="fas fa-eye"></i>
+                                    Детали</a>
+
                                 {% if order.status == 'process' %}
                                     <a href="#order_item_create" data-toggle="modal" class="btn btn-info mr-2"><i
                                             class="fas fa-plus"></i>
                                         Добавить</a>
-                                    <a onclick="send_post('{% url 'order_action' %}', {'action': 'update_status_order', 'order_id': '{{ order.pk }}', 'status': 'done'}, 'Вы действительно хотите закрыть заявку?')"
+                                    <a onclick="change_status()"
                                        class="btn btn-secondary mr-2 text-white"><i class="fas fa-check"></i> Закрыть
                                         заявку</a>
                                     <a onclick="send_post('{% url 'order_action' %}', {'action': 'update_status_order', 'order_id': '{{ order.pk }}', 'status': 'canceled'}, 'Вы действительно хотите отменить заявку?')"
                                        class="btn btn-warning mr-2 text-white"><i class="fas fa-times"></i> Отменить
                                         заявку</a>
-                                    <a href="{% url 'order_update' order.pk %}?back_url=order_detail&back_pk={{ order.pk }}" class="btn btn-primary mr-2 text-white"><i
+                                    <a href="{% url 'order_update' order.pk %}?back_url=order_detail&back_pk={{ order.pk }}"
+                                       class="btn btn-primary mr-2 text-white"><i
                                             class="fas fa-pencil-alt"></i> Обновить</a>
                                     <a onclick="send_post('{% url 'order_action' %}', {'action': 'delete_order', 'order_id': '{{ order.pk }}'}, 'Вы действительно хотите удалить заявку?')"
                                        type="button" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i>
@@ -233,10 +239,162 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="order_details" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Детали заявки №{{ order.pk }} для
+                        пациента {{ order.patient.fullname }}</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
 
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали заявки</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <p>
+                                    <b>Жалобы пациента</b>: {{ order.content }}
+                                </p>
+                                <p>
+                                    <b>Диагноз</b>: {{ order.diagnosis }}
+                                </p>
+                                {% if order.status == 'done' %}
+                                    <p>
+                                        <b>Результат осмотра</b>: {{ order.inspection }}
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row d-none" id="print">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="row align-content-center">
+                <div class="col-md-12 text-center">
+                    <h3 class="text-center">Санация № {{ order.pk }}</h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="row text-center">
+                        <div class="col-md-1 text-right">
+                            <b>Диагноз</b>
+                        </div>
+                        <div class="col-md-10" style="border-bottom: 1px solid #000000; width: 100%">
+                            {{ order.diagnosis }}
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-md-1 text-right">
+                            <b>Жалобы</b>
+                        </div>
+                        <div class="col-md-10" style="border-bottom: 1px solid #000000; width: 100%">
+                            {{ order.content }}
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row text-center mb-4">
+                        <div class="col-md-1 text-right">
+                            <b>Осмотр</b>
+                        </div>
+                        <div class="col-md-10" style="border-bottom: 1px solid #000000; width: 100%">
+                            {{ order.inspection }}
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row text-center mb-4">
+                        <table class="table table-bordered table-stripped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>№ зуба</th>
+                                <th>Категория услуги</th>
+                                <th>Услуга</th>
+                                <th>Сумма за ед.</th>
+                                <th>Кол-во</th>
+                                <th>Итого</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order_items %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ item.tooth }}
+                                    </td>
+                                    <td>
+                                        {{ item.service.category.name }}
+                                    </td>
+                                    <td>
+                                        {{ item.service.name }}
+                                    </td>
+                                    <td>
+                                        {{ item.price|intcomma|remove_zero }}
+                                    </td>
+                                    <td>
+                                        {{ item.count }}
+                                    </td>
+                                    <td>
+                                        {{ item.amount|intcomma|remove_zero }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6">Общая сумма:</td>
+                                <td><b>{{ total_amount|intcomma|remove_zero }}</b></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-6 text-left"><b>Пациент</b>: {{ order.patient.fullname }}</div>
+                        <div class="col-md-6 text-right"><b>Подпись</b>: _________________</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left"><b>Доктор</b>: {{ order.doctor.fullname }}</div>
+                        <div class="col-md-6 text-right"><b>Подпись</b>: _________________</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <style>
+        @media print {
+            body{
+                display: none;
+            }
+            #print{
+                display: block;
+            }
+        }
+    </style>
 {% endblock content %}
 {% block extra_js %}
     <script>
+        function change_status() {
+            let inp = prompt('Напишите результат осмотра:')
+            send_post('{% url 'order_action' %}', {
+                'action': 'update_status_order',
+                'order_id': '{{ order.pk }}',
+                'status': 'done',
+                'inspection': inp
+            }, 'Вы действительно хотите закрыть заявку?')
+        }
+
         function getServices(param) {
             let select_service = $('#select_service')
             select_service.val(0)
@@ -257,6 +415,13 @@
             let count = $('#count_input').val()
             let price = $('#price_input').val();
             total.val(price * count)
+        }
+        function printReport() {
+            const printContents = document.getElementById('print').innerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
         }
     </script>
 {% endblock extra_js %}

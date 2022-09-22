@@ -38,7 +38,12 @@ def create_order_item(post_request, user):
 def update_status_order(post_request, user):
     order_id = post_request.get('order_id')
     status = post_request.get('status')
-    Order.objects.filter(id=order_id).update(status=status)
+    if (post_request.get('inspection')):
+        inspection = post_request.get('inspection')
+        Order.objects.filter(id=order_id).update(status=status, inspection=inspection)
+    else:
+        Order.objects.filter(id=order_id).update(status=status)
+
     return dict({'back_url': reverse('order_detail', kwargs={'pk': order_id}),
                  'data': ''})
 
