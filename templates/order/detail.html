@@ -406,7 +406,7 @@
             select_service.val(0)
             select_service.removeAttr('disabled')
             select_service.children('option').hide();
-            select_service.children("option[value^=" + param.value + "]").show()
+            select_service.children("option[data-category-id^=" + param.value + "]").show()
             getTotal()
         }
 

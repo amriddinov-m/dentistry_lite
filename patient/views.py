@@ -89,7 +89,11 @@ class RecordListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(RecordListView, self).get_context_data(**kwargs)
-        context['records'] = Record.objects.order_by('date')
+        role = self.request.user.role
+        filter_dict = {}
+        if role == 'doctor':
+            filter_dict['doctor_id'] = self.request.user.id
+        context['records'] = Record.objects.filter(**filter_dict).order_by('date')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role='doctor')
         return context
