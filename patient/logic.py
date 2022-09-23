@@ -86,7 +86,8 @@ def send_message_to_tg(post_request, user):
         'text': text
     }
     url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    requests.post(url, data)
+    if not record.sent:
+        requests.post(url, data)
     record.sent = True
     record.save()
     return dict({
