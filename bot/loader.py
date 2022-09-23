@@ -13,7 +13,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token='5572492160:AAFkMPloFqnIgHRhmqKrv_H_X8qvSY5sze4')
+bot = Bot(token='5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 

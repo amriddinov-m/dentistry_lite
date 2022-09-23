@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from patient.models import Patient, Record
 
-BOT_TOKEN = '5572492160:AAFkMPloFqnIgHRhmqKrv_H_X8qvSY5sze4'
+BOT_TOKEN = '5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4'
 
 
 def create_record(post_request, user):
