@@ -75,9 +75,6 @@
                                         <td>{{ doctor.end_time }}</td>
                                         <td>
 
-                                            <a href="{% url 'doctor_update' doctor.pk %}">
-                                                <i class="text-primary fa fa-pencil-alt"></i>
-                                            </a>
                                             <a onclick="send_post('{% url 'doctor_action' %}', {'action': 'delete_doctor', 'doctor_id': '{{ doctor.pk }}'}, 'Вы действительно хотите удалить пользователя?')">
                                                 <i class="text-danger fa fa-trash-alt"></i>
                                             </a>
