@@ -9,13 +9,13 @@
                     <h3 class="ms-profile-username text-white">{{ patient.fullname }}</h3>
                 </div>
                 <div class="ms-profile-user-buttons">
-                    <a href="{{ patient.image }}" target="_blank" class="btn btn-primary"> <i class="material-icons">file_download</i>
-                        Скачать отчёт</a>
-                    <a href="{{ patient.image }}" target="_blank" class="btn btn-success"> <i
-                            class="fas fa-pencil-alt"></i>
+                    <a href="#create_record_for_patient" data-toggle="modal" class="btn btn-success"> <i
+                            class="fas fa-calendar-alt"></i>
                         Записать на приём</a>
+                    <a href="{% url 'patient_update' patient.pk %}" class="btn btn-primary"> <i
+                            class="fas fa-pencil-alt"></i>
+                        Редактировать</a>
                 </div>
-
             </div>
         </div>
         <div class="row">
@@ -369,7 +369,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Зарегистрировал</th>
-                                <td>{{ patient.registrar }}</td>
+                                <td>{{ patient.registrar.fullname }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Дата регистрации</th>
@@ -420,6 +420,69 @@
                                         </div>
                                         <div class="col-md-12 mb-2">
                                             <label for="validationCustom11">Диагноз</label>
+                                            <div class="input-group">
+                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
+                                            </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="create_record_for_patient" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Добавить запись на приём</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали записи</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'record_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_record">
+                                    <input type="hidden" name="patient_id" value="{{ patient.pk }}">
+                                    <div class="form-row">
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Доктор</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="doctor_id"
+                                                        id="select_doctor">
+                                                    <option disabled selected>Выберите доктора</option>
+                                                    {% for doctor in doctors %}
+                                                        <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="validationCustom01">Время записи</label>
+                                            <div class="input-group">
+                                                <input type="datetime-local" name="date" class="form-control"
+                                                       id="validationCustom01"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Контент</label>
                                             <div class="input-group">
                                             <textarea class="form-control" name="content" id="" cols="30" rows="10">
                                             </textarea>

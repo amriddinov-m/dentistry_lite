@@ -52,7 +52,7 @@
         <div class="row">
             <!-- Notifications Widgets -->
 
-            {% if request.user.role == 'admin' %}
+            {% if request.user.role == 'admin' or request.user.is_superuser %}
                 <div class="col-xl-3 col-md-6 col-sm-6">
                     <a href="{% url 'doctor_list' %}">
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">

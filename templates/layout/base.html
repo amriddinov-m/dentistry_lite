@@ -33,7 +33,7 @@
     {% endblock extra_css %}
 </head>
 
-<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar" onload="startClock()">
+<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
 <!-- Setting Panel -->
 <div class="ms-toggler ms-settings-toggle ms-d-block-lg">
     <i class="flaticon-gear"></i>
@@ -132,7 +132,7 @@
                 <li><a href="{% url 'record_list' %}">Список записей</a></li>
             </ul>
         </li>
-        {% if request.user.role != 'doctor' %}
+        {% if request.user.role == 'admin' or request.user.is_superuser %}
         <!-- Settings -->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#settings" aria-expanded="false"
@@ -166,8 +166,9 @@
             <span class="ms-toggler-bar bg-white"></span>
         </div>
         <div class="logo-sn logo-sm ms-d-block-sm">
-            <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="base.html"><img
-                    src="{% static 'assets/img/medjestic-logo-84x41.png' %}" alt="logo"> </a>
+            <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="{% url 'home-view' %}">
+                Miracle Denta
+            </a>
         </div>
         <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
 
@@ -636,7 +637,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="validationCustom01">Время записи</label>
                                         <div class="input-group">
                                             <input type="datetime-local" name="date" class="form-control"

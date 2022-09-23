@@ -18,6 +18,7 @@ def pages(request):
     path = request.path
     if request.user.is_authenticated:
         role = request.user.role
+        print(role)
         if request.user.is_superuser or role == 'admin':
             return data
 
