@@ -7,7 +7,7 @@ from bot.state import PatientState
 from patient.models import Patient
 
 
-@dp.message_handler(CommandStart())
+@dp.message_handler(CommandStart(), state='*')
 async def send_welcome(message: types.Message):
     await message.reply('🤖 Добро пожаловать\n\n Вас приветсвует помощник системы\n <b>Miracle Denta</b>!',
                         parse_mode=types.ParseMode.HTML)
