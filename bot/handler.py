@@ -24,8 +24,6 @@ async def search_patient_by_contact(message: types.Message, state: FSMContext):
         contact = f'+{contact}'
 
     patient = Patient.objects.filter(phone=contact)
-    print(contact)
-    print(patient)
     if patient:
         await message.answer('✅ Ваш аккаунт успешно прошёл идентификацию!', reply_markup=types.ReplyKeyboardRemove())
         patient.update(chat_id=message.chat.id)
