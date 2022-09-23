@@ -33,7 +33,7 @@
     {% endblock extra_css %}
 </head>
 
-<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar" onload="startClock()">
+<body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
 <!-- Setting Panel -->
 <div class="ms-toggler ms-settings-toggle ms-d-block-lg">
     <i class="flaticon-gear"></i>
@@ -166,8 +166,9 @@
             <span class="ms-toggler-bar bg-white"></span>
         </div>
         <div class="logo-sn logo-sm ms-d-block-sm">
-            <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="base.html"><img
-                    src="{% static 'assets/img/medjestic-logo-84x41.png' %}" alt="logo"> </a>
+            <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="{% url 'home-view' %}">
+                Miracle Denta
+            </a>
         </div>
         <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
 
