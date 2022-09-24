@@ -618,7 +618,7 @@
                                         <label for="validationCustom09">Пациент</label>
                                         <div class="input-group">
                                             <select class="form-control" style="width: 100%" name="patient_id"
-                                                    id="select_patient">
+                                                    id="select_patient_main">
                                                 <option disabled selected>Выберите пациента</option>
                                                 {% for patient in patients %}
                                                     <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
@@ -630,7 +630,7 @@
                                         <label for="validationCustom10">Доктор</label>
                                         <div class="input-group">
                                             <select class="form-control" style="width: 100%" name="doctor_id"
-                                                    id="select_doctor">
+                                                    id="select_doctor_main">
                                                 <option disabled selected>Выберите доктора</option>
                                                 {% for doctor in doctors %}
                                                     <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
@@ -770,6 +770,12 @@
 <script src="{% static 'assets/select2/js/select2.min.js' %}"></script>
 {% block extra_js %}
 {% endblock extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#select_patient_main, #select_doctor_main').select2()
+    });
+
+</script>
 <script>
     async function send_post(url, data, message) {
         let form_data = new FormData();
