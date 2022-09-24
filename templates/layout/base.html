@@ -28,7 +28,8 @@
     <!-- select2 -->
     <link href="{% static 'assets/select2/css/select2.min.css' %}" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.ico' %}" type="image/x-icon">
+
     {% block extra_css %}
     {% endblock extra_css %}
 </head>
@@ -133,19 +134,19 @@
             </ul>
         </li>
         {% if request.user.role == 'admin' or request.user.is_superuser %}
-        <!-- Settings -->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#settings" aria-expanded="false"
-               aria-controls="doctor">
-                <span><i class="fas fa-cogs"></i>Настройки</span>
-            </a>
-            <ul id="settings" class="collapse" aria-labelledby="settings" data-parent="#side-nav-accordion">
-                <li><a href="{% url 'service_category_list' %}">Услуги</a></li>
-                <li><a href="{% url 'doctor_list' %}">Пользователи</a></li>
+            <!-- Settings -->
+            <li class="menu-item">
+                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#settings" aria-expanded="false"
+                   aria-controls="doctor">
+                    <span><i class="fas fa-cogs"></i>Настройки</span>
+                </a>
+                <ul id="settings" class="collapse" aria-labelledby="settings" data-parent="#side-nav-accordion">
+                    <li><a href="{% url 'service_category_list' %}">Услуги</a></li>
+                    <li><a href="{% url 'doctor_list' %}">Пользователи</a></li>
 
-            </ul>
-        </li>
-        <!-- Settings -->
+                </ul>
+            </li>
+            <!-- Settings -->
         {% endif %}
         <!-- /Schedule -->
         <li class="menu-item">
