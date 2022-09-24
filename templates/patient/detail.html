@@ -464,7 +464,7 @@
                                             <label for="validationCustom10">Доктор</label>
                                             <div class="input-group">
                                                 <select class="form-control" style="width: 100%" name="doctor_id"
-                                                        id="select_doctor">
+                                                        id="select_doctor_record">
                                                     <option disabled selected>Выберите доктора</option>
                                                     {% for doctor in doctors %}
                                                         <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
@@ -507,6 +507,7 @@
     <script>
         $(document).ready(function () {
             $('#my_data_table').DataTable()
+            $('#select_doctor_record').select2()
         });
         var doc = $(document);
         doc
