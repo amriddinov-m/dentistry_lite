@@ -10,7 +10,7 @@ from patient.models import Patient
 
 @dp.message_handler(CommandStart(), state='*')
 async def send_welcome(message: types.Message):
-    await message.reply('🤖 Добро пожаловать\n\n Вас приветсвует помощник системы\n <b>Miracle Denta</b>!',
+    await message.reply('🤖 Добро пожаловать\n\n Вас приветсвует помощник системы\n <b>Центра Ортодонтии</b>!',
                         parse_mode=types.ParseMode.HTML)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отправить номер телефона 📱", request_contact=True))
