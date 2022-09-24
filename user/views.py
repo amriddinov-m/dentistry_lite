@@ -52,7 +52,7 @@ class HomeView(TemplateView):
 
         context['records'] = Record.objects.filter(**filter_dict)
 
-        context['doctors'] = User.objects.filter(role='doctor')
+        context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
         context['orders'] = Order.objects.all()
 
         return context

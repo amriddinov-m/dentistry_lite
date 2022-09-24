@@ -61,7 +61,7 @@ class PatientDetailView(TemplateView):
         context = super(PatientDetailView, self).get_context_data(**kwargs)
         context['patient'] = Patient.objects.get(id=pk)
         context['last_order'] = Order.objects.filter(status=True).order_by('-id').first()
-        context['doctors'] = User.objects.filter(status='active', role='doctor')
+        context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
         context['orders'] = Order.objects.select_related('doctor', 'registrar').filter(patient_id=pk)
         return context
 
@@ -95,7 +95,7 @@ class RecordListView(TemplateView):
             filter_dict['doctor_id'] = self.request.user.id
         context['records'] = Record.objects.filter(**filter_dict).order_by('date')
         context['patients'] = Patient.objects.all()
-        context['doctors'] = User.objects.filter(role='doctor')
+        context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
         return context
 
 

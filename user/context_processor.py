@@ -9,7 +9,7 @@ def pages(request):
     datetime_now = datetime.datetime.now()
     data = {
         'patients': Patient.objects.filter(status='active'),
-        'doctors': User.objects.filter(role='doctor'),
+        'doctors': User.objects.filter(role__in=['doctor', 'admin']),
         'records_today': Record.objects.filter(date__year=datetime_now.year,
                                                date__month=datetime_now.month,
                                                date__day=datetime_now.day)
@@ -18,7 +18,6 @@ def pages(request):
     path = request.path
     if request.user.is_authenticated:
         role = request.user.role
-        print(role)
         if request.user.is_superuser or role == 'admin':
             return data
 

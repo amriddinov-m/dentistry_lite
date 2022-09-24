@@ -52,7 +52,7 @@ class OrderListView(TemplateView):
 
         context['orders'] = Order.objects.filter(**filter_dict)
         context['patients'] = Patient.objects.filter(status='active')
-        context['doctors'] = User.objects.filter(status='active', role='doctor')
+        context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
         return context
 
 
