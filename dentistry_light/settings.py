@@ -31,6 +31,7 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/admin(.*)$',
+    '/api/v1/(.*)$',
     '/accounts/login/',
 )
 ALLOWED_HOSTS = ['*']
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'user',
     'widget_tweaks',
     'bot',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +135,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

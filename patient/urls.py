@@ -1,7 +1,13 @@
 from django.urls import path
+from rest_framework import routers
 
+from patient.api_views import PatientView
 from patient.views import PatientActionView, PatientDetailView, PatientListView, PatientUpdateView, RecordListView, \
     RecordActionView, RecordUpdateView
+
+
+router = routers.SimpleRouter()
+router.register('api/v1/patients', PatientView)
 
 urlpatterns = [
     path('patient/action/', PatientActionView.as_view(), name='patient_action'),

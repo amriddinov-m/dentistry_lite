@@ -1,7 +1,8 @@
+import requests
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
-
+from requests.auth import HTTPBasicAuth
 from bot.loader import dp
 from bot.state import PatientState
 from patient.models import Patient
@@ -19,14 +20,11 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(content_types=types.ContentTypes.CONTACT, state=PatientState.contact)
 async def search_patient_by_contact(message: types.Message, state: FSMContext):
-    contact = message.contact.phone_number
-    if not contact.startswith('+'):
-        contact = f'+{contact}'
-
-    patient = Patient.objects.filter(phone=contact)
-    if patient:
+    contact = message.contact.phone_number.replace('+', '')
+    response = requests.get(f'http://127.0.0.1:8000/api/v1/patients/?phone={contact}&chat_id={message.chat.id}',
+                            auth=HTTPBasicAuth('admin', 'adminadmin')).json()
+    if response:
         await message.answer('✅ Ваш аккаунт успешно прошёл идентификацию!', reply_markup=types.ReplyKeyboardRemove())
-        patient.update(chat_id=message.chat.id)
     else:
         await message.answer('❌Ваш номер не был зарегистрирован в стоматологии "<b>Центр ортодонтии</b>"',
                              reply_markup=types.ReplyKeyboardRemove(), parse_mode=types.ParseMode.HTML)
