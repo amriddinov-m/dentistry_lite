@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
@@ -14,7 +15,7 @@ from user.forms import LoginForm
 from user.logic import delete_doctor, update_status_doctor
 from user.models import User
 
-
+BOT_TOKEN = '5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4'
 class DoctorActionView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -57,6 +58,15 @@ class HomeView(TemplateView):
 
         return context
 
+
+def send_sms(request):
+    data = {
+        'chat_id': 52238804,
+        'text': 'text'
+    }
+    url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+    requests.post(url, data)
+    return HttpResponse(200)
 
 class DoctorListView(TemplateView):
     template_name = 'doctor/list.html'

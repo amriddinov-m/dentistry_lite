@@ -33,6 +33,7 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/admin(.*)$',
     '/api/v1/(.*)$',
     '/accounts/login/',
+    '/bot/send/',
 )
 ALLOWED_HOSTS = ['*']
 

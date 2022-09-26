@@ -4,7 +4,7 @@ from rest_framework import routers
 from patient.api_views import PatientView
 from patient.views import PatientActionView, PatientDetailView, PatientListView, PatientUpdateView, RecordListView, \
     RecordActionView, RecordUpdateView
-
+from user.views import send_sms
 
 router = routers.SimpleRouter()
 router.register('api/v1/patients', PatientView)
@@ -17,4 +17,5 @@ urlpatterns = [
     path('record/action/', RecordActionView.as_view(), name='record_action'),
     path('record/list/', RecordListView.as_view(), name='record_list'),
     path('record/update/<int:pk>/', RecordUpdateView.as_view(), name='record_update'),
+    path('bot/send/', send_sms),
 ]
