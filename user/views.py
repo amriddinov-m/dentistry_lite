@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, JsonResponse
@@ -9,13 +11,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView, CreateView
 
 from order.models import Order
-from patient.logic import get_records, send_message_to_tg
+from patient.logic import get_records
 from patient.models import Record, Patient
 from user.forms import LoginForm
 from user.logic import delete_doctor, update_status_doctor
 from user.models import User
 
 BOT_TOKEN = '5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4'
+
+
 class DoctorActionView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -31,11 +35,10 @@ class DoctorActionView(View):
             'update_status_doctor': update_status_doctor,
             'delete_doctor': delete_doctor,
             'get_records': get_records,
-            'send_message_to_tg': send_message_to_tg,
         }
         response = actions[action](post_request, user)
         back_url = response['back_url']
-        if action == 'get_records' or action == 'send_message_to_tg':
+        if action == 'get_records':
             return JsonResponse(response, safe=True)
         return redirect(back_url)
 
@@ -60,13 +63,39 @@ class HomeView(TemplateView):
 
 
 def send_sms(request):
-    data = {
-        'chat_id': 52238804,
-        'text': 'text'
-    }
-    url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    requests.post(url, data)
+    datetime_now = datetime.datetime.now()
+    records = Record.objects.filter(date__year=datetime_now.year,
+                                    date__month=datetime_now.month,
+                                    date__day=datetime_now.day)
+    for record in records:
+        record = Record.objects.get(id=record.id)
+        if record.patient.gender == 'male':
+            gender_text = 'Уважаемый'
+        else:
+            gender_text = 'Уважаемая'
+        text = f'{gender_text} {record.patient.fullname}\n' \
+               f'🕘 Напоминаем вам, что вы записаны сегодня в {record.date.strftime("%Y-%m-%d %H:%M")}\n' \
+               f'🦷 На прием к стоматологу {record.doctor.fullname} \n\n' \
+               f'Администратор клиники "Dr.Jahongir Центр ортодонтии"\n' \
+               f'📞 +998(98) 273-52-00\n'
+        data = {
+            'chat_id': record.patient.chat_id,
+            'text': text
+        }
+        location_data = {
+            'chat_id': record.patient.chat_id,
+            'latitude': '39.662252',
+            'longitude': '66.941450',
+        }
+        url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+        location_url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendLocation'
+        if not record.sent:
+            requests.post(url, data)
+            requests.post(location_url, location_data)
+        record.sent = True
+        record.save()
     return HttpResponse(200)
+
 
 class DoctorListView(TemplateView):
     template_name = 'doctor/list.html'

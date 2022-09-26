@@ -69,35 +69,3 @@ def get_records(post_request, user):
     })
 
 
-def send_message_to_tg(post_request, user):
-    record_id = post_request.get('record_id')
-    record = Record.objects.get(id=record_id)
-    if record.patient.gender == 'male':
-        gender_text = 'Уважаемый'
-    else:
-        gender_text = 'Уважаемая'
-    text = f'{gender_text} {record.patient.fullname}\n' \
-           f'🕘 Напоминаем вам, что вы записаны сегодня в {record.date.strftime("%Y-%m-%d %H:%M")}\n' \
-           f'🦷 На прием к стоматологу {record.doctor.fullname} \n\n' \
-           f'Администратор клиники "Dr.Jahongir Центр ортодонтии"\n' \
-           f'📞 +998(98) 273-52-00\n'
-    data = {
-        'chat_id': record.patient.chat_id,
-        'text': text
-    }
-    location_data = {
-        'chat_id': record.patient.chat_id,
-        'latitude': '39.662252',
-        'longitude': '66.941450',
-    }
-    url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    location_url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendLocation'
-    if not record.sent:
-        requests.post(url, data)
-        requests.post(location_url, location_data)
-    record.sent = True
-    record.save()
-    return dict({
-        'back_url': reverse(post_request.get('back_url')),
-        'data': ''
-    })

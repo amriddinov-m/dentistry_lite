@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, UpdateView
 
 from order.models import Order
 from patient.forms import PatientForm
-from patient.logic import create_patient, delete_patient, create_record, delete_record, send_message_to_tg, get_records
+from patient.logic import create_patient, delete_patient, create_record, delete_record, get_records
 from patient.models import Patient, Record
 from user.models import User
 
