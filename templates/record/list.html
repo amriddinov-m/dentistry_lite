@@ -51,7 +51,7 @@
                     {% for record in records %}
                         <tr role="row">
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ record.registrar.username }}</td>
+                            <td>{{ record.registrar.fullname }}</td>
                             <td>{{ record.patient }}</td>
                             <td>{{ record.doctor }}</td>
                             <td>{{ record.created }}</td>
