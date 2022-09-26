@@ -39,6 +39,7 @@
                             title: '{{ record.patient.fullname }} - {{ record.date|date:"H:i" }}',
                             start: '{{ record.date|date:'Y-m-d H:i' }}',
                             end: '{{ record.date|date:'Y-m-d H:i' }}',
+                            url: '{% url 'patient_detail' record.patient_id %}'
                         },
                     {% endfor %}
                 ]
