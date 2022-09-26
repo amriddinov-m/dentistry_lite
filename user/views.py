@@ -66,7 +66,8 @@ def send_sms(request):
     datetime_now = datetime.datetime.now()
     records = Record.objects.filter(date__year=datetime_now.year,
                                     date__month=datetime_now.month,
-                                    date__day=datetime_now.day)
+                                    date__day=datetime_now.day,
+                                    sent=False)
     for record in records:
         record = Record.objects.get(id=record.id)
         if record.patient.gender == 'male':
