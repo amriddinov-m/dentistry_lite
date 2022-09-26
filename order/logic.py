@@ -25,10 +25,10 @@ def create_order_for_patient(post_request, user):
 def create_order_item(post_request, user):
     order_id = post_request.get('order_id')
     service_id = post_request.get('service_id')
-    price = post_request.get('price')
-    count = post_request.get('count')
-    total = post_request.get('total')
-    tooth = post_request.get('tooth')
+    price = post_request.get('price').replace(' ', '')
+    count = post_request.get('count').replace(' ', '')
+    total = post_request.get('total').replace(' ', '')
+    tooth = post_request.get('tooth').replace(' ', '')
     content = post_request.get('content')
     OrderItem.objects.create(service_id=service_id, order_id=order_id, price=price, count=count, amount=total,
                              tooth=tooth, content=content, registrar=user)
