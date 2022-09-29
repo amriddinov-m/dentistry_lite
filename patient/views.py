@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -7,8 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
 
 from order.models import Order
-from patient.forms import PatientForm
-from patient.logic import create_patient, delete_patient, create_record, delete_record, get_records
+from patient.logic import create_patient, delete_patient, create_record, delete_record
 from patient.models import Patient, Record
 from user.models import User
 

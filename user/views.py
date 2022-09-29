@@ -90,9 +90,9 @@ def send_sms(request):
         }
         url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
         location_url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendLocation'
-        if not record.sent:
-            requests.post(url, data)
-            requests.post(location_url, location_data)
+
+        response = requests.post(url, data)
+        requests.post(location_url, location_data)
         record.sent = True
         record.save()
     return HttpResponse(200)
