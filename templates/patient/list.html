@@ -67,6 +67,11 @@
                                     <th tabindex="0" aria-controls="example" rowspan="1"
                                         colspan="1"
                                         aria-label="Office: activate to sort column ascending"
+                                    >Телеграм
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
                                     >Действия
                                     </th>
                                 </tr>
@@ -84,6 +89,14 @@
                                         <td>{{ patient.doc_series }}</td>
                                         <td>{{ patient.doc_number }}</td>
                                         <td>{{ patient.registrar }}</td>
+                                        <td>
+                                            {% if patient.chat_id %}
+                                                <i class="fa fa-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="fa fa-times-circle text-danger"></i>
+                                            {% endif %}
+
+                                        </td>
                                         <td>
                                             <a href="{% url 'patient_update' patient.pk %}">
                                                 <i class="text-primary fa fa-pencil-alt"></i>
