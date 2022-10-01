@@ -43,6 +43,11 @@
                         <th tabindex="0" aria-controls="example" rowspan="1"
                             colspan="1"
                             aria-label="Office: activate to sort column ascending"
+                        >Комментарий
+                        </th>
+                        <th tabindex="0" aria-controls="example" rowspan="1"
+                            colspan="1"
+                            aria-label="Office: activate to sort column ascending"
                         >Действия
                         </th>
                     </tr>
@@ -56,6 +61,7 @@
                             <td>{{ record.doctor }}</td>
                             <td>{{ record.created }}</td>
                             <td>{{ record.date }}</td>
+                            <td>{{ record.content }}</td>
                             <td>
                                 <a href="{% url 'patient_detail' record.patient_id %}"><i
                                         class="text-success fa fa-user-alt"></i></a>
