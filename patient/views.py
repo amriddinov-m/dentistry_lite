@@ -91,7 +91,7 @@ class RecordListView(TemplateView):
         filter_dict = {}
         if role == 'doctor':
             filter_dict['doctor_id'] = self.request.user.id
-        context['records'] = Record.objects.filter(**filter_dict).order_by('date')
+        context['records'] = Record.objects.filter(**filter_dict).order_by('date', '-sent')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
         return context
