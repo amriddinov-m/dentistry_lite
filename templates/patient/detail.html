@@ -348,6 +348,16 @@
                                 <td>{{ patient.phone }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">Идентификация телеграм</th>
+                                <td>
+                                    {% if patient.sent %}
+                                    <i class="fa fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times-circle text-danger"></i>
+                                {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row">Адрес</th>
                                 <td>{{ patient.address }}</td>
                             </tr>
