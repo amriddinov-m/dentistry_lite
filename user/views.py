@@ -98,6 +98,37 @@ def send_sms(request):
     return HttpResponse(200)
 
 
+def send_notification(request, pk):
+    record = Record.objects.get(pk=pk)
+
+    if record.patient.gender == 'male':
+        gender_text = 'Уважаемый'
+    else:
+        gender_text = 'Уважаемая'
+    text = f'{gender_text}, {record.patient.fullname}\n\n' \
+           f'🕘 Напоминаем вам, что вы записаны сегодня в {record.date.strftime("%Y-%m-%d %H:%M")}\n' \
+           f'🦷 На прием к стоматологу {record.doctor.fullname} \n\n' \
+           f'👨🏻‍⚕ Администратор клиники "Центр ортодонтии"\n\n' \
+           f'📞 +998(98) 273-52-00\n'
+    data = {
+        'chat_id': record.patient.chat_id,
+        'text': text
+    }
+    location_data = {
+        'chat_id': record.patient.chat_id,
+        'latitude': '39.662252',
+        'longitude': '66.941450',
+    }
+    url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+    location_url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendLocation'
+
+    response = requests.post(url, data)
+    requests.post(location_url, location_data)
+    record.sent = True
+    record.save()
+    return redirect(reverse('record_list'))
+
+
 class DoctorListView(TemplateView):
     template_name = 'doctor/list.html'
 
