@@ -51,8 +51,7 @@ class HomeView(TemplateView):
         context['patients'] = Patient.objects.all()
         role = self.request.user.role
         filter_dict = {}
-        if role == 'doctor':
-            filter_dict['doctor'] = self.request.user.id
+        filter_dict['doctor'] = self.request.user.id
 
         context['records'] = Record.objects.filter(**filter_dict)
 
