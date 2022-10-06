@@ -3,7 +3,7 @@ import datetime
 import requests
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -96,7 +96,7 @@ def send_sms(request):
         requests.post(location_url, location_data)
         record.sent = True
         record.save()
-    return records
+    return render(request, 'bot/list.html', {'records': records})
 
 
 def send_notification(request, pk):
