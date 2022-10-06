@@ -6,7 +6,7 @@
 </head>
 <body>
 {% for record in records %}
-    {{ record.patient.fullname }}
+    {{ record.patient.fullname }} - {{ record.date }}
 {% endfor %}
 </body>
 </html>
