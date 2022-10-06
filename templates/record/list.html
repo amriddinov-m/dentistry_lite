@@ -75,10 +75,8 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if record.sent == False %}
-                                    <a href="{% url 'send_notification' record.pk %}"><i
-                                            class="text-info fa fa-bell"></i></a>
-                                {% endif %}
+                                <a href="{% url 'send_notification' record.pk %}"><i
+                                        class="text-info fa fa-bell"></i></a>
 
                                 <a href="{% url 'patient_detail' record.patient_id %}"><i
                                         class="text-success fa fa-user-alt"></i></a>

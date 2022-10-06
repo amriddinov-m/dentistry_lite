@@ -56,6 +56,21 @@ class OrderListView(TemplateView):
         return context
 
 
+class MyOrderListView(TemplateView):
+    template_name = 'order/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyOrderListView, self).get_context_data(**kwargs)
+        role = self.request.user.role
+        filter_dict = {}
+        filter_dict['doctor_id'] = self.request.user.id
+
+        context['orders'] = Order.objects.filter(**filter_dict)
+        context['patients'] = Patient.objects.filter(status='active')
+        context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
+        return context
+
+
 class OrderDetailView(TemplateView):
     template_name = 'order/detail.html'
 

@@ -115,6 +115,7 @@
             <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
                 {% if request.user.role != 'doctor' %}
                     <li><a href="#order_create" data-toggle="modal">Добавить заявку</a></li>
+                    <li><a href="{% url 'my_order_list' %}">Мои заявки</a></li>
                 {% endif %}
                 <li><a href="{% url 'order_list' %}">Список завок</a></li>
             </ul>
@@ -129,7 +130,10 @@
             <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">
                 {% if request.user.role != 'doctor' %}
                     <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
+                    <li><a href="{% url 'my_record_list' %}">Мои записи</a></li>
+
                 {% endif %}
+
                 <li><a href="{% url 'record_list' %}">Список записей</a></li>
             </ul>
         </li>

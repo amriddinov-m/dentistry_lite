@@ -97,6 +97,21 @@ class RecordListView(TemplateView):
         return context
 
 
+class MyRecordListView(TemplateView):
+    template_name = 'record/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyRecordListView, self).get_context_data(**kwargs)
+        role = self.request.user.role
+        filter_dict = {}
+
+        filter_dict['doctor_id'] = self.request.user.id
+        context['records'] = Record.objects.filter(**filter_dict).order_by('date', '-sent')
+        context['patients'] = Patient.objects.all()
+        context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
+        return context
+
+
 class RecordUpdateView(UpdateView):
     template_name = 'record/update.html'
     model = Record
@@ -109,5 +124,3 @@ class RecordUpdateView(UpdateView):
         initial = super(RecordUpdateView, self).get_initial()
         initial['date'] = self.model.objects.get(id=self.kwargs['pk']).date.strftime('%Y-%m-%dT%H:%M:%S')
         return initial
-
-
