@@ -96,7 +96,7 @@ def send_sms(request):
         requests.post(location_url, location_data)
         record.sent = True
         record.save()
-    return HttpResponse(200)
+    return records
 
 
 def send_notification(request, pk):
