@@ -1,9 +1,28 @@
 {% extends 'layout/base.html' %}
 {% block content %}
     <div class="ms-panel">
-        <div class="ms-panel-header ms-panel-custome">
-            <h6>Список открытых заявок</h6>
-            <a href="#order_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+        <div class="ms-panel-header ms-panel-custome container-fluid">
+            {#            <div class="row">#}
+            <div class="col-md-3">
+                <h6>Список открытых заявок</h6>
+            </div>
+            <div class="col-md-5">
+                <form class="row" method="get">
+                    <div class="col-md-8">
+                        <input type="date" name="filter_date" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Фильтр</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{% url 'order_list' %}" class="btn btn-danger ml-3">Сброс</a>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <a href="#order_create" class="ms-text-primary float-right" data-toggle="modal">Добавить</a>
+            </div>
+            {#            </div>#}
         </div>
         <div class="ms-panel-body">
             <div class="table-responsive">

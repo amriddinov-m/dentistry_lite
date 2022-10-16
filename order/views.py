@@ -46,9 +46,13 @@ class OrderListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(OrderListView, self).get_context_data(**kwargs)
         role = self.request.user.role
+        filter_date = self.request.GET.get('filter_date')
+        print(filter_date)
         filter_dict = {}
         if role == 'doctor':
             filter_dict['doctor_id'] = self.request.user.id
+        if filter_date:
+            filter_dict['created__date'] = filter_date
 
         context['orders'] = Order.objects.filter(**filter_dict)
         context['patients'] = Patient.objects.filter(status='active')
