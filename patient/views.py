@@ -88,9 +88,12 @@ class RecordListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(RecordListView, self).get_context_data(**kwargs)
         role = self.request.user.role
+        filter_date = self.request.GET.get('filter_date')
         filter_dict = {}
         if role == 'doctor':
             filter_dict['doctor_id'] = self.request.user.id
+        if filter_date:
+            filter_dict['created__date'] = filter_date
         context['records'] = Record.objects.filter(**filter_dict).order_by('date', '-sent')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
@@ -102,10 +105,10 @@ class MyRecordListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(MyRecordListView, self).get_context_data(**kwargs)
-        role = self.request.user.role
-        filter_dict = {}
-
-        filter_dict['doctor_id'] = self.request.user.id
+        filter_date = self.request.GET.get('filter_date')
+        filter_dict = {'doctor_id': self.request.user.id}
+        if filter_date:
+            filter_dict['created__date'] = filter_date
         context['records'] = Record.objects.filter(**filter_dict).order_by('date', '-sent')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])

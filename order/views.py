@@ -55,6 +55,7 @@ class OrderListView(TemplateView):
             filter_dict['created__date'] = filter_date
         context['filter_date'] = filter_date
         context['orders'] = Order.objects.filter(**filter_dict)
+        context['redirect_url'] = 'order_list'
         context['patients'] = Patient.objects.filter(status='active')
         context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
         return context
@@ -65,10 +66,13 @@ class MyOrderListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(MyOrderListView, self).get_context_data(**kwargs)
-        role = self.request.user.role
-        filter_dict = {}
-        filter_dict['doctor_id'] = self.request.user.id
+        filter_date = self.request.GET.get('filter_date')
+        filter_dict = {'doctor_id': self.request.user.id}
+        if filter_date:
+            filter_dict['created__date'] = filter_date
 
+        context['filter_date'] = filter_date
+        context['redirect_url'] = 'my_order_list'
         context['orders'] = Order.objects.filter(**filter_dict)
         context['patients'] = Patient.objects.filter(status='active')
         context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
