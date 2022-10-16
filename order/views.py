@@ -53,7 +53,7 @@ class OrderListView(TemplateView):
             filter_dict['doctor_id'] = self.request.user.id
         if filter_date:
             filter_dict['created__date'] = filter_date
-
+        context['filter_date'] = filter_date
         context['orders'] = Order.objects.filter(**filter_dict)
         context['patients'] = Patient.objects.filter(status='active')
         context['doctors'] = User.objects.filter(status='active', role__in=['doctor', 'admin'])
