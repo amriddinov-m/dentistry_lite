@@ -71,9 +71,11 @@ def get_records(post_request, user):
 
 def send_sms_today_patients(post_request, user):
     datetime_now = datetime.datetime.now()
+    user_id = post_request.get('user_id')
     records = Record.objects.filter(date__year=datetime_now.year,
                                     date__month=datetime_now.month,
                                     date__day=datetime_now.day,
+                                    doctor_id=user_id,
                                     patient__chat_id__isnull=False)
     for record in records:
         if record.patient.gender == 'male':

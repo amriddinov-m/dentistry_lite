@@ -23,7 +23,7 @@
 
                     <div class="col-md-6">
                         {% if send_tg_to_patients %}
-                            <a onclick="send_post('{% url 'record_action' %}', {'action': 'send_sms_today_patients'}, 'Вы действительно хотите отправить смс сегодняшним пациентам?')"
+                            <a onclick="send_post('{% url 'record_action' %}', {'action': 'send_sms_today_patients', 'user_id': {{ request.user.id }} }, 'Вы действительно хотите отправить смс сегодняшним пациентам?')"
                                class="btn btn-primary float-right text-white">Отправить смс</a>
                         {% endif %}
                     </div>
