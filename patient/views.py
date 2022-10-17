@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
 
 from order.models import Order
-from patient.logic import create_patient, delete_patient, create_record, delete_record
+from patient.logic import create_patient, delete_patient, create_record, delete_record, send_sms_today_patients
 from patient.models import Patient, Record
 from user.models import User
 
@@ -45,6 +45,7 @@ class RecordActionView(View):
         actions = {
             'create_record': create_record,
             'delete_record': delete_record,
+            'send_sms_today_patients': send_sms_today_patients
 
         }
         response = actions[action](post_request, user)
@@ -112,6 +113,7 @@ class MyRecordListView(TemplateView):
         context['records'] = Record.objects.filter(**filter_dict).order_by('date', '-sent')
         context['patients'] = Patient.objects.all()
         context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
+        context['send_tg_to_patients'] = True
         return context
 
 

@@ -69,7 +69,6 @@ def send_sms(request):
                                     sent=False,
                                     patient__chat_id__isnull=False)
     for record in records:
-        record = Record.objects.get(id=record.id)
         if record.patient.gender == 'male':
             gender_text = 'Уважаемый'
         else:

@@ -1,6 +1,10 @@
 import datetime
+
+import requests
 from django.urls import reverse
 from patient.models import Patient, Record
+
+BOT_TOKEN = '5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4'
 
 
 def create_record(post_request, user):
@@ -65,3 +69,37 @@ def get_records(post_request, user):
     })
 
 
+def send_sms_today_patients(post_request, user):
+    datetime_now = datetime.datetime.now()
+    records = Record.objects.filter(date__year=datetime_now.year,
+                                    date__month=datetime_now.month,
+                                    date__day=datetime_now.day,
+                                    patient__chat_id__isnull=False)
+    for record in records:
+        if record.patient.gender == 'male':
+            gender_text = 'Уважаемый'
+        else:
+            gender_text = 'Уважаемая'
+        text = f'{gender_text}, {record.patient.fullname}\n\n' \
+               f'🕘 Напоминаем вам, что вы записаны сегодня в {record.date.strftime("%Y-%m-%d %H:%M")}\n' \
+               f'🦷 На прием к стоматологу {record.doctor.fullname} \n\n' \
+               f'👨🏻‍⚕ Администратор клиники "Центр ортодонтии"\n\n' \
+               f'📞 +998(98) 273-52-00\n'
+        data = {
+            'chat_id': record.patient.chat_id,
+            'text': text
+        }
+        location_data = {
+            'chat_id': record.patient.chat_id,
+            'latitude': '39.662252',
+            'longitude': '66.941450',
+        }
+        url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+        location_url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendLocation'
+
+        requests.post(url, data)
+        requests.post(location_url, location_data)
+        record.sent = True
+        record.save()
+    return dict({'back_url': reverse('my_record_list'),
+                 'data': ''})

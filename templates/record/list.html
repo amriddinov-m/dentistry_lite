@@ -19,7 +19,18 @@
                 </form>
             </div>
             <div class="col-md-4">
-                <a href="#record_create" class="ms-text-primary float-right" data-toggle="modal">Добавить</a>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        {% if send_tg_to_patients %}
+                            <a onclick="send_post('{% url 'record_action' %}', {'action': 'send_sms_today_patients'}, 'Вы действительно хотите отправить смс сегодняшним пациентам?')"
+                               class="btn btn-primary float-right text-white">Отправить смс</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <a href="#record_create" class="ms-text-primary float-right" data-toggle="modal">Добавить</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="ms-panel-body">
