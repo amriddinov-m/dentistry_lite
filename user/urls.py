@@ -9,6 +9,6 @@ urlpatterns = [
     path('doctor/create/', DoctorCreateView.as_view(), name='doctor_create'),
     path('doctor/update/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_update'),
     path('login/', LoginView.as_view(), name="login-view"),
-    path(".well-known/pki-validation/84AF15DA50B8F9949A0CF45288D845CC.txt", SslFiles.as_view()),
+    path(".well-known/pki-validation/506A87593918CABE2A944065C5E7B9E9.txt", SslFiles.as_view()),
 
 ]
