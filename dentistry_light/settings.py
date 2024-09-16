@@ -69,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.RequireLoginMiddleware',
+    'company.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'dentistry_light.urls'

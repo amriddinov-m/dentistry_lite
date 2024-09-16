@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 from company.choices import CURRENCIES
+from company.middleware import get_current_user
 
 
 class Company(models.Model):
@@ -41,27 +42,28 @@ class Branch(models.Model):
         verbose_name_plural = 'Филиалы'
 
 
-# def get_current_branch():
-#     from .middleware import get_current_request
-#     request = get_current_request()
-#     print(f"Request: {request}")
-#     if request:
-#         print(f"User: {request.user}")
-#         print(f"User authenticated: {request.user.is_authenticated}")
-#         if request.user.is_authenticated:
-#             print(f"User branch: {getattr(request.user, 'branch', 'No branch attribute')}")
-#             return request.user.branch
-#     return None
+class BranchManager(models.Manager):
+    def get_queryset(self):
+        user = get_current_user()
+        queryset = super().get_queryset()
+        if user and user.is_authenticated:
+            return queryset.filter(branch=user.branch)
+        return queryset.none()
 
 
-# class CompanyAwareManager(models.Manager):
-#     def get_queryset(self):
-#         branch = get_current_branch()
-#
-#         if branch is None:
-#             raise ImproperlyConfigured(
-#                 "Компания не установлена в контексте запроса. "
-#                 "Проверьте, что компания доступна."
-#             )
-#
-#         return super().get_queryset().filter(branch=branch)
+class DefaultManager(models.Manager):
+    pass
+
+
+class BranchableModel(models.Model):
+    branch = models.ForeignKey('company.Branch', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.branch:
+            current_user = get_current_user()
+            if current_user and current_user.is_authenticated:
+                self.branch = current_user.branch
+        super().save(*args, **kwargs)

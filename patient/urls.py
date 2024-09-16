@@ -7,7 +7,7 @@ from patient.views import PatientActionView, PatientDetailView, PatientListView,
 from user.views import send_sms, send_notification
 
 router = routers.SimpleRouter()
-router.register('api/v1/patients', PatientView)
+router.register('api/v1/patients', PatientView, basename='patient_list')
 
 urlpatterns = [
     path('patient/action/', PatientActionView.as_view(), name='patient_action'),

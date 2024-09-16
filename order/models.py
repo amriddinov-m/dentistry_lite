@@ -1,7 +1,9 @@
 from django.db import models
 
+from company.models import BranchManager, DefaultManager, BranchableModel
 
-class Order(models.Model):
+
+class Order(BranchableModel):
     class Status(models.TextChoices):
         process = 'process', 'В процессе'
         done = 'done', 'Завершённый'
@@ -23,6 +25,9 @@ class Order(models.Model):
     registrar = models.ForeignKey('user.User',
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
+
+    objects = BranchManager()
+    all_objects = DefaultManager()
 
     def __str__(self):
         return f'{self.patient} | {self.doctor}'

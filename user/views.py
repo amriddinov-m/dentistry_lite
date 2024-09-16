@@ -49,11 +49,10 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['patients'] = Patient.objects.all()
-        role = self.request.user.role
-        filter_dict = {}
-        filter_dict['doctor'] = self.request.user.id
+        filter_dict = {'doctor': self.request.user.id}
 
         context['records'] = Record.objects.filter(**filter_dict)
+        print()
 
         context['doctors'] = User.objects.filter(role__in=['doctor', 'admin'])
         context['orders'] = Order.objects.all()

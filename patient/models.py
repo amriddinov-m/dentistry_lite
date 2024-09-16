@@ -1,7 +1,9 @@
 from django.db import models
 
+from company.models import BranchManager, DefaultManager, BranchableModel
 
-class Patient(models.Model):
+
+class Patient(BranchableModel):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
@@ -32,6 +34,9 @@ class Patient(models.Model):
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
 
+    objects = BranchManager()
+    all_objects = DefaultManager()
+
     def __str__(self):
         return self.fullname
 
@@ -40,7 +45,7 @@ class Patient(models.Model):
         verbose_name_plural = 'Пациенты'
 
 
-class Record(models.Model):
+class Record(BranchableModel):
     patient = models.ForeignKey('Patient',
                                 on_delete=models.PROTECT,
                                 verbose_name='Пациент')
@@ -56,6 +61,9 @@ class Record(models.Model):
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
     sent = models.BooleanField(default=False)
+
+    objects = BranchManager()
+    all_objects = DefaultManager()
 
     def __str__(self):
         return f'{self.patient} | {self.doctor} | {self.date}'

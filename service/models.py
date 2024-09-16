@@ -1,7 +1,9 @@
 from django.db import models
 
+from company.models import BranchManager, DefaultManager, BranchableModel
 
-class ServiceCategory(models.Model):
+
+class ServiceCategory(BranchableModel):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
@@ -9,6 +11,9 @@ class ServiceCategory(models.Model):
     name = models.CharField(verbose_name='Название', max_length=255)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+
+    objects = BranchManager()
+    all_objects = DefaultManager()
 
     def __str__(self):
         return self.name

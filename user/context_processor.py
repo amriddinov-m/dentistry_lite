@@ -7,13 +7,17 @@ from django.core.exceptions import PermissionDenied
 
 def pages(request):
     datetime_now = datetime.datetime.now()
-    data = {
-        'patients': Patient.objects.filter(status='active'),
-        'doctors': User.objects.filter(role__in=['doctor', 'admin']),
-        'records_today': Record.objects.filter(date__year=datetime_now.year,
-                                               date__month=datetime_now.month,
-                                               date__day=datetime_now.day)
-    }
+    try:
+        data = {
+            'patients': Patient.objects.filter(status='active'),
+            'doctors': User.objects.filter(role__in=['doctor', 'admin']),
+            'records_today': Record.objects.filter(date__year=datetime_now.year,
+                                                   date__month=datetime_now.month,
+                                                   date__day=datetime_now.day)
+        }
+    except Exception as err:
+        print(err)
+        data = {}
 
     path = request.path
     if request.user.is_authenticated:

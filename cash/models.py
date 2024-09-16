@@ -1,7 +1,9 @@
 from django.db import models
 
+from company.models import BranchManager, DefaultManager, BranchableModel
 
-class Cash(models.Model):
+
+class Cash(BranchableModel):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
@@ -20,6 +22,9 @@ class Cash(models.Model):
                                 verbose_name='Добавил',
                                 on_delete=models.PROTECT)
 
+    objects = BranchManager()
+    all_objects = DefaultManager()
+
     def __str__(self):
         return f"{self.name} | Баланс: {self.amount} сум"
 
@@ -28,7 +33,7 @@ class Cash(models.Model):
         verbose_name_plural = 'Кассы'
 
 
-class CashLog(models.Model):
+class CashLog(BranchableModel):
     class Type(models.TextChoices):
         income = 'income', 'Приход'
         outcome = 'outcome', 'Расход'
@@ -51,8 +56,10 @@ class CashLog(models.Model):
                                 on_delete=models.PROTECT)
     content = models.TextField(verbose_name='Контент', null=True)
     cash = models.ForeignKey('Cash', verbose_name='Касса', on_delete=models.SET_NULL, null=True)
-    method = models.CharField(verbose_name='Метод оплаты', max_length=255, choices=Method.choices,
-                              )
+    method = models.CharField(verbose_name='Метод оплаты', max_length=255, choices=Method.choices)
+
+    objects = BranchManager()
+    all_objects = DefaultManager()
 
     def __str__(self):
         return f"{self.model_type} | Баланс: {self.amount} сум"

@@ -3,6 +3,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 
+from company.models import BranchableModel
+
 
 class MyUserManager(BaseUserManager):
     """
@@ -44,7 +46,10 @@ class MyUserManager(BaseUserManager):
         return self._create_user(username, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+branch = models.ForeignKey('company.Branch', on_delete=models.CASCADE, null=True)
+
+
+class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
     class Role(models.TextChoices):
         doctor = 'doctor', 'Доктор',
         registrar = 'registrar', 'Регистратор',
@@ -53,7 +58,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
-    branch = models.ForeignKey('company.Branch', on_delete=models.CASCADE, null=True)
     fullname = models.CharField(verbose_name='Ф.И.О', max_length=255)
     username = models.CharField(verbose_name='Имя пользователя', max_length=255, unique=True)
     role = models.CharField(verbose_name='Роль', max_length=255, choices=Role.choices)
