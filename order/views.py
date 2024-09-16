@@ -23,10 +23,10 @@ class OrderActionView(View):
 
     def post(self, request):
         post_request = self.request.POST
-        print(post_request)
+
         user = self.request.user
         action = self.request.POST.get('action', None)
-        print(action)
+
         actions = {
             'create_order': create_order,
             'create_order_for_patient': create_order_for_patient,
@@ -47,7 +47,7 @@ class OrderListView(TemplateView):
         context = super(OrderListView, self).get_context_data(**kwargs)
         role = self.request.user.role
         filter_date = self.request.GET.get('filter_date')
-        print(filter_date)
+
         filter_dict = {}
         if role == 'doctor':
             filter_dict['doctor_id'] = self.request.user.id

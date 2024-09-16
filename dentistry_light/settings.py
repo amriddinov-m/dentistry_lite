@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     'patient',
     'patient.templatetags',
     'service',
+    'company',
     'user',
+    'cash',
     'widget_tweaks',
     'bot',
     'rest_framework',
@@ -137,7 +139,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -152,6 +153,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,0 +1,198 @@
+{% extends 'layout/base.html' %}
+{% load humanize poll_extras %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список касс</h6>
+                        <a href="#cash_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="row">
+                            {% for cash in cashes %}
+                                <div class="col-md-4">
+                                    <div class="card text-white bg-{% cycle 'success' 'primary' 'secondary' %} mb-3" style="max-width: 26rem;">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    {{ cash.name }}
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <a class="cursor_pointer float-right ml-3"
+                                                       onclick="send_post('{% url 'cash_action' %}', {'action': 'delete_cash', 'cash_id': '{{ cash.pk }}'}, 'Вы действительно хотите удалить кассу?')">
+                                                        <i class="text-danger fa fa-trash-alt"></i>
+                                                    </a>
+                                                    <a class="cursor_pointer float-right"
+                                                       onclick="cash_update('{{ cash.id }}', '{{ cash.name }}', '{{ cash.amount|remove_zero }}', '{{ cash.method }}', '{{ cash.status }}')">
+                                                        <i class="text-white fa fa-pencil-alt"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-white font-weight-bold">{{ cash.amount|intcomma }}
+                                                сум</h5>
+                                            <p class="card-text text-white">Метод: {{ cash.get_method_display }}</p>
+                                            <p class="card-text text-white">Статус: <span class="badge{% if cash.status == 'disabled' %} badge-danger{% endif %} text-white">{{ cash.get_status_display }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="cash_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Создать кассу</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали кассы</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'cash_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_cash">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Сумма</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" name="amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Метод оплаты</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="method">
+                                                    <option value="cash">Наличные</option>
+                                                    <option value="card">Перевод</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cash_update" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Изменить категорию услуг</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали категории</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'cash_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_cash">
+                                    <input type="hidden" name="cash_id" value="" id="cash_id">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name" id="cash_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Сумма</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" name="amount"
+                                                       id="cash_amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Метод оплаты</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="method" id="cash_method">
+                                                    <option value="cash">Наличные</option>
+                                                    <option value="card">Перевод</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status" id="cash_status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#service_data_table').DataTable()
+        });
+
+        function cash_update(cash_id, name, amount, method, status) {
+            $('#cash_update').modal('toggle')
+            $('#cash_id').val(cash_id)
+            $('#cash_name').val(name)
+            $('#cash_amount').val(amount)
+            $('#cash_method').val(method)
+            $('#cash_status').val(status)
+        }
+
+    </script>
+{% endblock extra_js %}

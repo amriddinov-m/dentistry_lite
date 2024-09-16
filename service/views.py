@@ -37,7 +37,6 @@ class ServiceActionView(View):
         post_request = self.request.POST
         user = self.request.user
         action = self.request.POST.get('action', None)
-        print(action)
         actions = {
             'create_service_category': create_service_category,
             'delete_service_category': delete_service_category,

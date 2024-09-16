@@ -27,10 +27,10 @@ class DoctorActionView(View):
 
     def post(self, request):
         post_request = self.request.POST
-        print(post_request)
+
         user = self.request.user
         action = self.request.POST.get('action', None)
-        print(action)
+
         actions = {
             'update_status_doctor': update_status_doctor,
             'delete_doctor': delete_doctor,
@@ -183,3 +183,10 @@ class DoctorUpdateView(UpdateView):
 class SslFiles(TemplateView):
     template_name = 'ssl_files.html'
     content_type = 'text/plain'
+
+
+class WebAppView(TemplateView):
+    template_name = 'webapp/index.html'
+
+
+range_list = range(1, 1000)

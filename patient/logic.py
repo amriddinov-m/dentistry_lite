@@ -37,7 +37,6 @@ def create_patient(post_request, user):
 
 def delete_patient(post_request, user):
     patient_id = post_request.get('patient_id')
-    print(patient_id)
     Patient.objects.filter(id=patient_id).delete()
 
     return dict({'back_url': reverse('patient_list'),

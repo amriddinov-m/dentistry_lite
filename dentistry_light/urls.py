@@ -32,6 +32,7 @@ urlpatterns = [
     path('', include('patient.urls')),
     path('', include('service.urls')),
     path('', include('user.urls')),
+    path('', include('cash.urls')),
 ]
 
 urlpatterns += router.urls

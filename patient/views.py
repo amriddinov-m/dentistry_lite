@@ -18,10 +18,10 @@ class PatientActionView(View):
 
     def post(self, request):
         post_request = self.request.POST
-        print(post_request)
+
         user = self.request.user
         action = self.request.POST.get('action', None)
-        print(action)
+
         actions = {
             'create_patient': create_patient,
             'delete_patient': delete_patient,
@@ -38,10 +38,8 @@ class RecordActionView(View):
 
     def post(self, request):
         post_request = self.request.POST
-        print(post_request)
         user = self.request.user
         action = self.request.POST.get('action', None)
-        print(action)
         actions = {
             'create_record': create_record,
             'delete_record': delete_record,

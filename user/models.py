@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 
 
@@ -52,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
-
+    branch = models.ForeignKey('company.Branch', on_delete=models.CASCADE, null=True)
     fullname = models.CharField(verbose_name='Ф.И.О', max_length=255)
     username = models.CharField(verbose_name='Имя пользователя', max_length=255, unique=True)
     role = models.CharField(verbose_name='Роль', max_length=255, choices=Role.choices)

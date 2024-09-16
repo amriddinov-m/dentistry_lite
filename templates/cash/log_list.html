@@ -1,0 +1,282 @@
+{% extends 'layout/base.html' %}
+{% load humanize %}
+{% block content %}
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6>Список оплат</h6>
+                        <a href="#cash_log_create" class="ms-text-primary" data-toggle="modal">Добавить</a>
+                    </div>
+                    <div class="ms-panel-body">
+                        <div class="table-responsive">
+                            <table id="cash_log_data_table" class="table table-striped thead-primary w-100">
+                                <thead>
+                                <tr role="row">
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Тип оплаты
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Метод оплаты
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Категория
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Причина
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Сумма
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Дата создания
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Добавил
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Контент
+                                    </th>
+                                    <th tabindex="0" aria-controls="example" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Office: activate to sort column ascending"
+                                    >Действия
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for log in cash_logs %}
+                                    <tr role="row">
+                                        <td>{{ log.get_cash_type_display }}</td>
+                                        <td>{{ log.get_method_display }}</td>
+                                        <td>{{ log.get_status_display }}</td>
+                                        <td></td>
+                                        <td>{{ log.amount|intcomma }}</td>
+                                        <td>{{ log.created }}</td>
+                                        <td>{{ log.creator }}</td>
+                                        <td>{{ log.content }}</td>
+                                        <td>
+                                            <a class="cursor_pointer"
+                                               onclick="service_category_update('{{ log.id }}', '{{ log.name }}', '{{ log.status }}')">
+                                                <i class="text-primary fa fa-pencil-alt"></i>
+                                            </a>
+                                            <a class="cursor_pointer"
+                                               onclick="send_post('{% url 'service_action' %}', {'action': 'delete_service_category', 'category_id': '{{ log.pk }}'}, 'Вы действительно хотите удалить категорию услуг?')">
+                                                <i class="text-danger fa fa-trash-alt"></i>
+                                            </a>
+                                            <a href="{% url 'service_category_detail' log.pk %}">
+                                                <i class="text-success fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="cash_log_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Добавить оплату</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали оплаты</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'cash_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_cash_log">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="validationCustom09">Тип оплаты</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="cash_type">
+                                                    <option value="income">Приход</option>
+                                                    <option value="outcome">Расход</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom10">Категория</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="model_type"
+                                                        onchange="model_type_change(this)">
+                                                    <option value="all" disabled selected>-------------</option>
+                                                    <option value="patient">Пациент</option>
+                                                    <option value="service">Услуги</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="validationCustom10">Причина</label>
+                                            <div class="input-group">
+                                                <select class="form-control d-none" style="width: 100%" name="model_id"
+                                                        id="select_patient" disabled>
+                                                    <option value="all" disabled selected>-------------</option>
+                                                    {% for patient in patients %}
+                                                        <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <select class="form-control d-none" style="width: 100%" name="model_id"
+                                                        id="select_service" disabled>
+                                                    <option value="all" disabled selected>-------------</option>
+                                                    {% for service in services %}
+                                                        <option value="{{ service.pk }}">{{ service.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <label for="validationCustom10">Касса</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="model_id">
+                                                    <option value="all" disabled>-------------</option>
+                                                    {% for cash in cashes %}
+                                                        <option value="{{ cash.pk }}">{{ cash.name }}
+                                                            - {{ cash.amount|intcomma }} сум
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <label for="validationCustom10">Сумма</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" name="amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <label for="validationCustom10">Контент</label>
+                                            <textarea class="form-control" name="content" id="" cols="30"
+                                                      rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="service_category_update" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Изменить категорию услуг</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали категории</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'service_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_service_category">
+                                    <input type="hidden" name="category_id" value="" id="service_category_id">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="name"
+                                                       id="service_category_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Статус</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="status"
+                                                        id="service_category_status">
+                                                    <option value="active">Активный</option>
+                                                    <option value="disabled">Не активный</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#service_data_table').DataTable()
+        });
+
+        function service_category_update(category_id, name, status) {
+            $('#service_category_update').modal('toggle')
+            $('#service_category_id').val(category_id)
+            $('#service_category_name').val(name)
+            $('#service_category_status').val(status)
+        }
+
+        function model_type_change(select) {
+            let model_type = select.value
+            let select_patient = $('#select_patient')
+            let select_service = $('#select_service')
+            if (model_type === 'patient') {
+                select_patient.removeClass('d-none')
+                select_service.addClass('d-none')
+                select_patient.removeAttr('disabled')
+                select_service.attr('disabled', 'disabled')
+            } else if (model_type === 'service') {
+                select_service.removeClass('d-none')
+                select_patient.addClass('d-none')
+                select_service.removeAttr('disabled')
+                select_patient.attr('disabled', 'disabled')
+            }
+
+        }
+
+    </script>
+{% endblock extra_js %}

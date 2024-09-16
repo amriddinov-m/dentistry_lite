@@ -92,20 +92,20 @@
             </a>
         </li>
         <!-- /Dashboard -->
-        {% if request.user.role != 'doctor' %}
-            <!-- Patient -->
-            <li class="menu-item">
-                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#patient" aria-expanded="false"
-                   aria-controls="patient">
-                    <span><i class="fas fa-user"></i>Пациенты</span>
-                </a>
-                <ul id="patient" class="collapse" aria-labelledby="patient" data-parent="#side-nav-accordion">
-                    <li><a href="#prescription" data-toggle="modal">Добавить пациента</a></li>
-                    <li><a href="{% url 'patient_list' %}">Список пациентов</a></li>
-                </ul>
-            </li>
-            <!-- /Patient -->
-        {% endif %}
+        {#        {% if request.user.role != 'doctor' %}#}
+        <!-- Patient -->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#patient" aria-expanded="false"
+               aria-controls="patient">
+                <span><i class="fas fa-user"></i>Пациенты</span>
+            </a>
+            <ul id="patient" class="collapse" aria-labelledby="patient" data-parent="#side-nav-accordion">
+                <li><a href="#prescription" data-toggle="modal">Добавить пациента</a></li>
+                <li><a href="{% url 'patient_list' %}">Список пациентов</a></li>
+            </ul>
+        </li>
+        <!-- /Patient -->
+        {#        {% endif %}#}
         <!-- Schedule -->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#schedule" aria-expanded="false"
@@ -147,6 +147,17 @@
                 <ul id="settings" class="collapse" aria-labelledby="settings" data-parent="#side-nav-accordion">
                     <li><a href="{% url 'service_category_list' %}">Услуги</a></li>
                     <li><a href="{% url 'doctor_list' %}">Пользователи</a></li>
+                    <li><a href="{% url 'cash_list' %}">Касса</a></li>
+
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#cash" aria-expanded="false"
+                   aria-controls="doctor">
+                    <span><i class="fas fa-money-bill"></i>Касса</span>
+                </a>
+                <ul id="cash" class="collapse" aria-labelledby="cash" data-parent="#side-nav-accordion">
+                    <li><a href="{% url 'cash_log_list' %}">Приходы и рассходы</a></li>
 
                 </ul>
             </li>
