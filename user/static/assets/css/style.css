@@ -1251,21 +1251,26 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 
 .side-nav ul li.menu-item {
     padding: 0;
+    background: #fff;
+    border-radius: 10px;
+    margin: 10px;
+    color: #009efb;
 }
 
 .side-nav .menu-item a {
     position: relative;
     display: block;
     padding: 15px 0 15px 25px;
-    color: #fff;
+    color: #009efb;
     -webkit-transition: 0s;
     transition: 0s;
+
 }
 
 .side-nav .menu-item a span {
     -webkit-transition: 0.3s;
     transition: 0.3s;
-    color: #fff;
+    color: #009efb;
 }
 
 .side-nav .menu-item a.active::before {
@@ -1285,17 +1290,22 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
     height: 30px;
 }
 
+.side-nav li.menu-item ul li:hover{
+    margin-left: 5px;
+    transition: .2s ease-in-out;
+}
+
 .side-nav li.menu-item a:hover,
 .side-nav li.menu-item a:hover span,
 .side-nav li.menu-item a.active,
 .side-nav li.menu-item a.active span,
 .side-nav li.menu-item ul li a.active {
-    color: #fff;
+    color: #000;
 }
 
 .side-nav li.menu-item a:hover,
 .side-nav li.menu-item a.active {
-    color: #ffffff;
+    color: #000;
 }
 
 .side-nav li.menu-item a:hover,
@@ -1305,16 +1315,17 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 
 
 .side-nav li.menu-item ul li a {
-    color: #4e4e4e;
+    color: #009efb;
 }
 
 .side-nav .menu-item ul {
     padding-left: 40px;
     background-color: #f2f2f2;
+    border-radius: 10px;
 }
 
 .side-nav .has-chevron:hover::after {
-    color: #fff;
+    color: #000000;
 }
 
 .side-nav a[aria-expanded="false"]::after {
@@ -8963,6 +8974,18 @@ body:not(.ms-settings-open) .ms-settings-toggle:hover {
     line-height: 2;
     width: 30%;
     height: 100%;
+}
+.ms-infographics-widget.ms-p-relative .ms-card-body:hover + i{
+    width: 50%;
+    transition: .5s ease-in-out;
+    background: #43b4f7;
+    font-size: 20px;
+}
+.ms-infographics-widget.ms-p-relative .ms-card-body + i:hover{
+    width: 50%;
+    transition: .5s ease-in-out;
+    background: #43b4f7;
+    font-size: 20px;
 }
 
 .ms-infographics-widget.ms-p-relative .ms-card-body + i::before {
