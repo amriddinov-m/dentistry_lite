@@ -97,7 +97,7 @@
         {#        {% if request.user.role != 'doctor' %}#}
         <!-- Patient -->
         <li class="menu-item">
-            <a class="{% if path_name == 'patient_list' %}active{% endif %}"
+            <a class="{% if path_name == 'patient_list' or path_name == 'patient_detail' %}active{% endif %}"
                href="{% url 'patient_list' %}">
                 <span><i class="fas fa-users"></i>Пациенты</span>
             </a>
@@ -110,7 +110,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a class="{% if path_name == 'service_category_list' %}active{% endif %}"
+            <a class="{% if path_name == 'service_category_list' or path_name == 'service_category_detail' %}active{% endif %}"
                href="{% url 'service_category_list' %}">
                 <span><i class="fas fa-folder-open"></i>Услуги</span>
             </a>
