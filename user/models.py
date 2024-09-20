@@ -46,9 +46,6 @@ class MyUserManager(BaseUserManager):
         return self._create_user(username, password, **extra_fields)
 
 
-branch = models.ForeignKey('company.Branch', on_delete=models.CASCADE, null=True)
-
-
 class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
     class Role(models.TextChoices):
         doctor = 'doctor', 'Доктор',
@@ -58,6 +55,7 @@ class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
     class Status(models.TextChoices):
         active = 'active', 'Активный'
         disabled = 'disabled', 'Не активный'
+
     fullname = models.CharField(verbose_name='Ф.И.О', max_length=255)
     username = models.CharField(verbose_name='Имя пользователя', max_length=255, unique=True)
     role = models.CharField(verbose_name='Роль', max_length=255, choices=Role.choices)

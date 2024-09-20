@@ -41,12 +41,21 @@ class CashLog(BranchableModel):
     class ModelType(models.TextChoices):
         patient = 'patient', 'Пациент'
         service = 'service', 'Услуги'
+        user = 'user', 'Сотрудник'
+        order = 'order', 'Санация'
 
     class Method(models.TextChoices):
-        cash = 'cash', 'Наличные',
+        cash = 'cash', 'Наличные'
         card = 'card', 'Перевод'
 
+    class Category(models.TextChoices):
+        order_payment = 'service_payment', 'Оплата за санацию (услугу)'
+        balance_topup = 'balance_topup', 'Пополнение баланса'
+        staff_salary = 'staff_salary', 'Зарплата персонала'
+        service_expense = 'service_expense', 'Расход на услугу'
+
     cash_type = models.CharField(verbose_name='Тип оплаты', max_length=255, choices=Type.choices)
+    category = models.CharField(max_length=255, verbose_name='Категория', choices=Category.choices)
     model_type = models.CharField(verbose_name='Категория', max_length=255, choices=ModelType.choices)
     model_id = models.IntegerField(verbose_name='Причина', default=0)
     amount = models.FloatField(verbose_name='Сумма', default=0)

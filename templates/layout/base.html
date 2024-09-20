@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Miracle Denta</title>
+    <title>Dentify</title>
     <!-- Iconic Fonts -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{% static 'vendors/iconic-fonts/font-awesome/css/all.min.css' %}" rel="stylesheet">
@@ -35,6 +35,7 @@
 </head>
 
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar" onload="startClock()">
+{% with request.resolver_match.url_name as path_name %}
 <!-- Setting Panel -->
 <div class="ms-toggler ms-settings-toggle ms-d-block-lg">
     <i class="flaticon-gear"></i>
@@ -80,14 +81,15 @@
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
         <a class="pl-0 ml-0 text-center text-white" href="{% url 'home-view' %}">
-            <h3 class="text-white">Miracle Denta</h3>
+            <h3 class="text-white">Dentify</h3>
         </a>
     </div>
     <!-- Navigation -->
     <ul class="accordion ms-main-aside fs-14" id="side-nav-accordion">
         <!-- Dashboard -->
         <li class="menu-item">
-            <a href="{% url 'home-view' %}">
+            <a class="{% if path_name == 'home-view' %}active{% endif %}"
+               href="{% url 'home-view' %}">
                 <span><i class="fa fa-home"></i> Главная</span>
             </a>
         </li>
@@ -95,72 +97,106 @@
         {#        {% if request.user.role != 'doctor' %}#}
         <!-- Patient -->
         <li class="menu-item">
-            <a href="{% url 'patient_list' %}">
-                <span><i class="fas fa-user"></i>Пациенты</span>
+            <a class="{% if path_name == 'patient_list' %}active{% endif %}"
+               href="{% url 'patient_list' %}">
+                <span><i class="fas fa-users"></i>Пациенты</span>
             </a>
+        </li>
+
+        <li class="menu-item">
+            <a class="{% if path_name == 'doctor_list' %}active{% endif %}"
+               href="{% url 'doctor_list' %}">
+                <span><i class="fas fa-user-check"></i>Персонал</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a class="{% if path_name == 'service_category_list' %}active{% endif %}"
+               href="{% url 'service_category_list' %}">
+                <span><i class="fas fa-folder-open"></i>Услуги</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="#"
+               class="{% if path_name == 'order_list' or path_name == 'record_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %} has-chevron"
+               data-toggle="collapse" data-target="#reports" aria-expanded="false"
+               aria-controls="doctor" style="">
+                <span><i class="fas fa-file-invoice"></i>Отчёты</span>
+            </a>
+            <ul id="reports"
+                class="collapse {% if path_name == 'order_list' or path_name == 'record_list' or path_name == 'order_detail' or path_name == 'order_update' %}show{% endif %}"
+                aria-labelledby="reports" data-parent="#side-nav-accordion">
+                <li><a class="{% if path_name == 'order_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %}" href="{% url 'order_list' %}">Список визитов</a></li>
+                <li><a class="{% if path_name == 'record_list' %}active{% endif %}" href="{% url 'record_list' %}">Список записей</a></li>
+            </ul>
         </li>
         <!-- /Patient -->
         {#        {% endif %}#}
         <!-- Schedule -->
 
-        {% if request.user.role != 'doctor' %}
+        {% if request.user.role == 'doctor' %}
             <li class="menu-item">
                 <a href="{% url 'my_order_list' %}">
                     <i class="fas fa-file"></i>
                     <span>
-                        Мои заявки
+                        Мои пациентские визиты
+                    </span>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="{% url 'my_record_list' %}">
+                    <i class="fas fa-file"></i>
+                    <span>
+                        Мои записи
                     </span>
                 </a>
             </li>
         {% endif %}
-        <li class="menu-item">
-            <a href="{% url 'order_list' %}">
-                <i class="fas fa-file"></i>
-                <span>
-                    Список завок
-                </span>
-            </a>
-        </li>
+{#        <li class="menu-item">#}
+{#            <a href="{% url 'order_list' %}">#}
+{#                <i class="fas fa-file"></i>#}
+{#                <span>#}
+{#                    Список завок#}
+{#                </span>#}
+{#            </a>#}
+{#        </li>#}
         <!-- /Schedule -->
         <!-- Schedule -->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#calendar-nav" aria-expanded="false"
-               aria-controls="schedule">
-                <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>
-            </a>
-            <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">
-                {% if request.user.role != 'doctor' %}
-                    <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>
-                    <li><a href="{% url 'my_record_list' %}">Мои записи</a></li>
-
-                {% endif %}
-
-                <li><a href="{% url 'record_list' %}">Список записей</a></li>
-            </ul>
-        </li>
+{#        <li class="menu-item">#}
+{#            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#calendar-nav" aria-expanded="false"#}
+{#               aria-controls="schedule">#}
+{#                <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>#}
+{#            </a>#}
+{#            <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">#}
+{#                {% if request.user.role != 'doctor' %}#}
+{#                    <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>#}
+{#                    <li><a href="{% url 'my_record_list' %}">Мои записи</a></li>#}
+{##}
+{#                {% endif %}#}
+{##}
+{#                <li><a href="{% url 'record_list' %}">Список записей</a></li>#}
+{#            </ul>#}
+{#        </li>#}
         {% if request.user.role == 'admin' or request.user.is_superuser %}
             <!-- Settings -->
             <li class="menu-item">
-                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#settings" aria-expanded="false"
-                   aria-controls="doctor">
-                    <span><i class="fas fa-cogs"></i>Настройки</span>
-                </a>
-                <ul id="settings" class="collapse" aria-labelledby="settings" data-parent="#side-nav-accordion">
-                    <li><a href="{% url 'service_category_list' %}">Услуги</a></li>
-                    <li><a href="{% url 'doctor_list' %}">Пользователи</a></li>
-                    <li><a href="{% url 'cash_list' %}">Касса</a></li>
-
-                </ul>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="has-chevron" data-toggle="collapse" data-target="#cash" aria-expanded="false"
+                <a href="#" class="has-chevron {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}active{% endif %}" data-toggle="collapse" data-target="#cash" aria-expanded="false"
                    aria-controls="doctor">
                     <span><i class="fas fa-money-bill"></i>Касса</span>
                 </a>
-                <ul id="cash" class="collapse" aria-labelledby="cash" data-parent="#side-nav-accordion">
-                    <li><a href="{% url 'cash_log_list' %}">Приходы и рассходы</a></li>
-
+                <ul id="cash" class="collapse {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}show{% endif %}" aria-labelledby="cash" data-parent="#side-nav-accordion">
+                    <li><a class="{% if path_name == 'cash_list' %}active{% endif %}" href="{% url 'cash_list' %}">Список касс</a></li>
+                    <li><a class="{% if path_name == 'cash_log_list' %}active{% endif %}" href="{% url 'cash_log_list' %}">Приходы и рассходы</a></li>
                 </ul>
+            </li>
+
+            <li class="menu-item">
+                <a href="#">
+                    <i class="fas fa-cogs"></i>
+                    <span>
+                        Настройки
+                    </span>
+                </a>
             </li>
             <!-- Settings -->
         {% endif %}
@@ -183,7 +219,7 @@
         </div>
         <div class="logo-sn logo-sm ms-d-block-sm">
             <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="{% url 'home-view' %}">
-                Miracle Denta
+                Dentify
             </a>
         </div>
         <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
@@ -686,7 +722,7 @@
     <div class="modal-dialog ms-modal-dialog-width">
         <div class="modal-content ms-modal-content-width">
             <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Создать заявку</h4>
+                <h4 class="modal-title text-white">Создать визит</h4>
                 <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
 
             </div>
@@ -694,7 +730,7 @@
                 <div class="col-xl-12 col-md-12">
                     <div class="ms-panel ms-panel-bshadow-none">
                         <div class="ms-panel-header">
-                            <h6>Детали заявки</h6>
+                            <h6>Детали визита</h6>
                         </div>
                         <div class="ms-panel-body">
                             <form class="needs-validation" novalidate="" action="{% url 'order_action' %}"
@@ -751,6 +787,7 @@
     </div>
 </div>
 
+{% endwith %}
 <!-- SCRIPTS -->
 <!-- Global Required Scripts Start -->
 <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>

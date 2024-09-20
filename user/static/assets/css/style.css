@@ -861,7 +861,11 @@ pre {
 
 .has-chevron {
     position: relative;
+
+    border-radius: 10px 10px 0 0!important;
 }
+
+
 
 .has-chevron::after {
     content: '\e313';
@@ -1251,17 +1255,15 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 
 .side-nav ul li.menu-item {
     padding: 0;
-    background: #fff;
     border-radius: 10px;
     margin: 10px;
-    color: #009efb;
+    color: #fff;
 }
 
 .side-nav .menu-item a {
-    position: relative;
     display: block;
     padding: 15px 0 15px 25px;
-    color: #009efb;
+    color: #fff;
     -webkit-transition: 0s;
     transition: 0s;
 
@@ -1270,7 +1272,7 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 .side-nav .menu-item a span {
     -webkit-transition: 0.3s;
     transition: 0.3s;
-    color: #009efb;
+    color: #fff;
 }
 
 .side-nav .menu-item a.active::before {
@@ -1278,7 +1280,6 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
     position: absolute;
     top: 0;
     left: 0;
-    width: 3px;
     height: 100%;
     background-color: #009efb;
 }
@@ -1300,12 +1301,14 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 .side-nav li.menu-item a.active,
 .side-nav li.menu-item a.active span,
 .side-nav li.menu-item ul li a.active {
-    color: #000;
+    color: #009efb;
+    background: #fff;
+    border-radius: 10px;
 }
 
 .side-nav li.menu-item a:hover,
 .side-nav li.menu-item a.active {
-    color: #000;
+    color: #009efb;
 }
 
 .side-nav li.menu-item a:hover,
@@ -1315,13 +1318,14 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 
 
 .side-nav li.menu-item ul li a {
-    color: #009efb;
+    color: #000;
 }
 
 .side-nav .menu-item ul {
-    padding-left: 40px;
-    background-color: #f2f2f2;
-    border-radius: 10px;
+    /*padding-left: 40px;*/
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #f5f5f5;
 }
 
 .side-nav .has-chevron:hover::after {
@@ -1338,6 +1342,7 @@ body:not(.ms-aside-left-open) .ms-aside-toggler .ms-toggler-bar {
 
 .side-nav li.menu-item a i {
     margin-right: 20px;
+    font-size: 18px;
 }
 
 /* Aside Right */
