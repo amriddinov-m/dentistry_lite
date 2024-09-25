@@ -129,7 +129,7 @@ class DoctorListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DoctorListView, self).get_context_data(**kwargs)
-        context['doctors'] = User.objects.filter()
+        context['doctors'] = User.objects.exclude(is_superuser=True)
         return context
 
 
