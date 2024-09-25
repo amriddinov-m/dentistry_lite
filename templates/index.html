@@ -6,6 +6,49 @@
         .fc .fc-timegrid-slot {
             height: 2em;
         }
+
+        /* Общие стили для контекстного меню */
+        .custom-dropdown {
+            position: absolute;
+            z-index: 1000;
+            display: block;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            padding: 8px 0;
+            min-width: 220px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .custom-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-dropdown a.cancel {
+            color: #dc3545; /* Красный цвет для отмены */
+        }
+
+        .custom-dropdown a.cancel:hover {
+            background-color: #ffe5e5; /* Легкий красноватый фон для "Отменить запись" */
+        }
+
+        /* Иконки и текст выровнены по центру */
+        .custom-dropdown a::before {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
     </style>
 {% endblock extra_css %}
 
@@ -80,12 +123,24 @@
         </div>
     </div>
 
+    <div id="context-menu" class="custom-dropdown bg-white" style="display:none; position: absolute">
+        <a class="dropdown-item" href="#" onclick="payVisit()">💳 Принять оплату</a>
+        <a class="dropdown-item" href="#" onclick="editVisit()">📝 Редактировать визит</a>
+        <a class="dropdown-item" href="#" onclick="fillTreatment()">✏️ Заполнить лечение</a>
+        <a class="dropdown-item" href="#" onclick="patientCard()">📋 Карточка пациента</a>
+        <a class="dropdown-item" href="#" onclick="reschedule()">🔄 Перенести запись</a>
+        <a class="dropdown-item" href="#" onclick="rebook()">🔁 Записать повторно</a>
+        <a class="dropdown-item cancel" href="#" onclick="cancelVisit()">❌ Отменить запись</a>
+    </div>
+
 
 {% endblock content %}
 
 {% block extra_js %}
     <script src="{% static 'full_calendar_lib/main.js' %}"></script>
     <script>
+        let isMenuOpen = false;
+
         function formatDate(date) {
             let d = new Date(date),
                 month = '' + (d.getMonth() + 1),
@@ -148,8 +203,8 @@
                 businessHours: true, // display business hours
                 editable: true,
                 selectable: true,
-                eventClick: function (arg) {
-                    alert('SSS')
+                eventClick: function (info) {
+                    toggleContextMenu(info.jsEvent, info.event);
                 },
                 select: function (arg) {
                     let appointment_date = formatDate(arg.start)
@@ -197,5 +252,32 @@
             btn_appointment_create.addClass('rounded-pill px-4')
             btn_appointment_create.css('text-transform', 'none')
         });
+
+        function toggleContextMenu(event, calendarEvent) {
+            event.preventDefault();  // Останавливаем обычное поведение клика
+            let contextMenu = document.getElementById('context-menu');
+
+            // Если меню уже открыто, и мы кликаем снова, закрываем его
+            if (isMenuOpen) {
+                contextMenu.style.display = 'none';
+                isMenuOpen = false;
+                return;
+            }
+
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            contextMenu.style.display = 'block';
+            isMenuOpen = true;
+        }
+
+        {#document.addEventListener('click', function (event) {#}
+        {#    let contextMenu = document.getElementById('context-menu');#}
+        {##}
+        {#    // Проверяем, кликнули ли вне контекстного меню#}
+        {#    if (!contextMenu.contains(event.target)) {#}
+        {#        contextMenu.style.display = 'none';#}
+        {#        isMenuOpen = false;#}
+        {#    }#}
+        {# });#}
     </script>
 {% endblock extra_js %}
