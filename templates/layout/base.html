@@ -36,756 +36,875 @@
 
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar" onload="startClock()">
 {% with request.resolver_match.url_name as path_name %}
-<!-- Setting Panel -->
-<div class="ms-toggler ms-settings-toggle ms-d-block-lg">
-    <i class="flaticon-gear"></i>
-</div>
-<div class="ms-settings-panel ms-d-block-lg">
-    <div class="row">
-        <div class="col-xl-4 col-md-4">
-            <h4 class="section-title">Customize</h4>
-            <div>
-                <label class="ms-switch">
-                    <input type="checkbox" id="dark-mode">
-                    <span class="ms-switch-slider round"></span>
-                </label>
-                <span> Dark Mode </span>
-            </div>
+    <!-- Setting Panel -->
+    <div class="ms-toggler ms-settings-toggle ms-d-block-lg">
+        <i class="flaticon-gear"></i>
+    </div>
+    <div class="ms-settings-panel ms-d-block-lg">
+        <div class="row">
+            <div class="col-xl-4 col-md-4">
+                <h4 class="section-title">Customize</h4>
+                <div>
+                    <label class="ms-switch">
+                        <input type="checkbox" id="dark-mode">
+                        <span class="ms-switch-slider round"></span>
+                    </label>
+                    <span> Dark Mode </span>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
-<!-- Preloader -->
-<div id="preloader-wrap">
-    <div class="spinner spinner-8">
-        <div class="ms-circle1 ms-child"></div>
-        <div class="ms-circle2 ms-child"></div>
-        <div class="ms-circle3 ms-child"></div>
-        <div class="ms-circle4 ms-child"></div>
-        <div class="ms-circle5 ms-child"></div>
-        <div class="ms-circle6 ms-child"></div>
-        <div class="ms-circle7 ms-child"></div>
-        <div class="ms-circle8 ms-child"></div>
-        <div class="ms-circle9 ms-child"></div>
-        <div class="ms-circle10 ms-child"></div>
-        <div class="ms-circle11 ms-child"></div>
-        <div class="ms-circle12 ms-child"></div>
+    <!-- Preloader -->
+    <div id="preloader-wrap">
+        <div class="spinner spinner-8">
+            <div class="ms-circle1 ms-child"></div>
+            <div class="ms-circle2 ms-child"></div>
+            <div class="ms-circle3 ms-child"></div>
+            <div class="ms-circle4 ms-child"></div>
+            <div class="ms-circle5 ms-child"></div>
+            <div class="ms-circle6 ms-child"></div>
+            <div class="ms-circle7 ms-child"></div>
+            <div class="ms-circle8 ms-child"></div>
+            <div class="ms-circle9 ms-child"></div>
+            <div class="ms-circle10 ms-child"></div>
+            <div class="ms-circle11 ms-child"></div>
+            <div class="ms-circle12 ms-child"></div>
+        </div>
     </div>
-</div>
-<!-- Overlays -->
-<div class="ms-aside-overlay ms-overlay-left ms-toggler" data-target="#ms-side-nav" data-toggle="slideLeft"></div>
-<div class="ms-aside-overlay ms-overlay-right ms-toggler" data-target="#ms-recent-activity"
-     data-toggle="slideRight"></div>
-<!-- Sidebar Navigation Left -->
-<aside id="ms-side-nav" class="side-nav fixed ms-aside-scrollable ms-aside-left">
-    <!-- Logo -->
-    <div class="logo-sn ms-d-block-lg">
-        <a class="pl-0 ml-0 text-center text-white" href="{% url 'home-view' %}">
-            <h3 class="text-white">Dentify</h3>
-        </a>
-    </div>
-    <!-- Navigation -->
-    <ul class="accordion ms-main-aside fs-14" id="side-nav-accordion">
-        <!-- Dashboard -->
-        <li class="menu-item">
-            <a class="{% if path_name == 'home-view' %}active{% endif %}"
-               href="{% url 'home-view' %}">
-                <span><i class="fa fa-home"></i> Главная</span>
+    <!-- Overlays -->
+    <div class="ms-aside-overlay ms-overlay-left ms-toggler" data-target="#ms-side-nav" data-toggle="slideLeft"></div>
+    <div class="ms-aside-overlay ms-overlay-right ms-toggler" data-target="#ms-recent-activity"
+         data-toggle="slideRight"></div>
+    <!-- Sidebar Navigation Left -->
+    <aside id="ms-side-nav" class="side-nav fixed ms-aside-scrollable ms-aside-left">
+        <!-- Logo -->
+        <div class="logo-sn ms-d-block-lg">
+            <a class="pl-0 ml-0 text-center text-white" href="{% url 'home-view' %}">
+                <h3 class="text-white">Dentify</h3>
             </a>
-        </li>
-        <!-- /Dashboard -->
-        {#        {% if request.user.role != 'doctor' %}#}
-        <!-- Patient -->
-        <li class="menu-item">
-            <a class="{% if path_name == 'patient_list' or path_name == 'patient_detail' %}active{% endif %}"
-               href="{% url 'patient_list' %}">
-                <span><i class="fas fa-users"></i>Пациенты</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a class="{% if path_name == 'doctor_list' %}active{% endif %}"
-               href="{% url 'doctor_list' %}">
-                <span><i class="fas fa-user-check"></i>Персонал</span>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a class="{% if path_name == 'service_category_list' or path_name == 'service_category_detail' %}active{% endif %}"
-               href="{% url 'service_category_list' %}">
-                <span><i class="fas fa-folder-open"></i>Услуги</span>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="#"
-               class="{% if path_name == 'order_list' or path_name == 'record_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %} has-chevron"
-               data-toggle="collapse" data-target="#reports" aria-expanded="false"
-               aria-controls="doctor" style="">
-                <span><i class="fas fa-file-invoice"></i>Отчёты</span>
-            </a>
-            <ul id="reports"
-                class="collapse {% if path_name == 'order_list' or path_name == 'record_list' or path_name == 'order_detail' or path_name == 'order_update' %}show{% endif %}"
-                aria-labelledby="reports" data-parent="#side-nav-accordion">
-                <li><a class="{% if path_name == 'order_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %}" href="{% url 'order_list' %}">Список визитов</a></li>
-                <li><a class="{% if path_name == 'record_list' %}active{% endif %}" href="{% url 'record_list' %}">Список записей</a></li>
-            </ul>
-        </li>
-        <!-- /Patient -->
-        {#        {% endif %}#}
-        <!-- Schedule -->
-
-        {% if request.user.role == 'doctor' %}
+        </div>
+        <!-- Navigation -->
+        <ul class="accordion ms-main-aside fs-14" id="side-nav-accordion">
+            <!-- Dashboard -->
             <li class="menu-item">
-                <a href="{% url 'my_order_list' %}">
-                    <i class="fas fa-file"></i>
-                    <span>
-                        Мои пациентские визиты
-                    </span>
+                <a class="{% if path_name == 'home-view' %}active{% endif %}"
+                   href="{% url 'home-view' %}">
+                    <span><i class="fa fa-home"></i> Главная</span>
+                </a>
+            </li>
+            <!-- /Dashboard -->
+            {#        {% if request.user.role != 'doctor' %}#}
+            <!-- Patient -->
+            <li class="menu-item">
+                <a class="{% if path_name == 'patient_list' or path_name == 'patient_detail' %}active{% endif %}"
+                   href="{% url 'patient_list' %}">
+                    <span><i class="fas fa-users"></i>Пациенты</span>
                 </a>
             </li>
 
             <li class="menu-item">
-                <a href="{% url 'my_record_list' %}">
-                    <i class="fas fa-file"></i>
-                    <span>
-                        Мои записи
-                    </span>
+                <a class="{% if path_name == 'doctor_list' %}active{% endif %}"
+                   href="{% url 'doctor_list' %}">
+                    <span><i class="fas fa-user-check"></i>Персонал</span>
                 </a>
             </li>
-        {% endif %}
-{#        <li class="menu-item">#}
-{#            <a href="{% url 'order_list' %}">#}
-{#                <i class="fas fa-file"></i>#}
-{#                <span>#}
-{#                    Список завок#}
-{#                </span>#}
-{#            </a>#}
-{#        </li>#}
-        <!-- /Schedule -->
-        <!-- Schedule -->
-{#        <li class="menu-item">#}
-{#            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#calendar-nav" aria-expanded="false"#}
-{#               aria-controls="schedule">#}
-{#                <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>#}
-{#            </a>#}
-{#            <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">#}
-{#                {% if request.user.role != 'doctor' %}#}
-{#                    <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>#}
-{#                    <li><a href="{% url 'my_record_list' %}">Мои записи</a></li>#}
-{##}
-{#                {% endif %}#}
-{##}
-{#                <li><a href="{% url 'record_list' %}">Список записей</a></li>#}
-{#            </ul>#}
-{#        </li>#}
-        {% if request.user.role == 'admin' or request.user.is_superuser %}
-            <!-- Settings -->
             <li class="menu-item">
-                <a href="#" class="has-chevron {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}active{% endif %}" data-toggle="collapse" data-target="#cash" aria-expanded="false"
-                   aria-controls="doctor">
-                    <span><i class="fas fa-money-bill"></i>Касса</span>
+                <a class="{% if path_name == 'service_category_list' or path_name == 'service_category_detail' %}active{% endif %}"
+                   href="{% url 'service_category_list' %}">
+                    <span><i class="fas fa-folder-open"></i>Услуги</span>
                 </a>
-                <ul id="cash" class="collapse {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}show{% endif %}" aria-labelledby="cash" data-parent="#side-nav-accordion">
-                    <li><a class="{% if path_name == 'cash_list' %}active{% endif %}" href="{% url 'cash_list' %}">Список касс</a></li>
-                    <li><a class="{% if path_name == 'cash_log_list' %}active{% endif %}" href="{% url 'cash_log_list' %}">Приходы и рассходы</a></li>
+            </li>
+            <li class="menu-item">
+                <a href="#"
+                   class="{% if path_name == 'order_list' or path_name == 'appointment_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %} has-chevron"
+                   data-toggle="collapse" data-target="#reports" aria-expanded="false"
+                   aria-controls="doctor" style="">
+                    <span><i class="fas fa-file-invoice"></i>Отчёты</span>
+                </a>
+                <ul id="reports"
+                    class="collapse {% if path_name == 'order_list' or path_name == 'appointment_list' or path_name == 'order_detail' or path_name == 'order_update' %}show{% endif %}"
+                    aria-labelledby="reports" data-parent="#side-nav-accordion">
+                    <li>
+                        <a class="{% if path_name == 'order_list' or path_name == 'order_detail' or path_name == 'order_update' %}active{% endif %}"
+                           href="{% url 'order_list' %}">Список визитов</a></li>
+                    <li><a class="{% if path_name == 'appointment_list' %}active{% endif %}"
+                           href="{% url 'appointment_list' %}">Список записей</a></li>
                 </ul>
             </li>
+            <!-- /Patient -->
+            {#        {% endif %}#}
+            <!-- Schedule -->
 
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-cogs"></i>
-                    <span>
-                        Настройки
+            {% if request.user.role == 'doctor' %}
+                <li class="menu-item">
+                    <a href="{% url 'my_order_list' %}">
+                        <i class="fas fa-file"></i>
+                        <span>
+                        Мои пациентские визиты
                     </span>
-                </a>
-            </li>
-            <!-- Settings -->
-        {% endif %}
-        <!-- /Schedule -->
-        <li class="menu-item">
-            <a href="https://miracle-network.uz" target="_blank">Powered by <b>Miracle
-                Network</b></a>
-        </li>
-
-    </ul>
-</aside>
-<!-- Main Content -->
-<main class="body-content">
-    <!-- Navigation Bar -->
-    <nav class="navbar ms-navbar">
-        <div class="ms-aside-toggler ms-toggler pl-0" data-target="#ms-side-nav" data-toggle="slideLeft">
-            <span class="ms-toggler-bar bg-white"></span>
-            <span class="ms-toggler-bar bg-white"></span>
-            <span class="ms-toggler-bar bg-white"></span>
-        </div>
-        <div class="logo-sn logo-sm ms-d-block-sm">
-            <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="{% url 'home-view' %}">
-                Dentify
-            </a>
-        </div>
-        <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
-
-            {% if request.user.role != 'doctor' %}
-                <li class="ms-nav-item  ms-d-none">
-                    <a href="#record_create" class="text-white" data-toggle="modal"><i
-                            class="flaticon-spreadsheet mr-2"></i>
-                        Записать в очередь
                     </a>
                 </li>
 
-                <li class="ms-nav-item ms-d-none">
-                    <a href="#prescription" class="text-white" data-toggle="modal"><i class="flaticon-pencil mr-2"></i>
-                        Зарегистрировать пациента</a>
+                <li class="menu-item">
+                    <a href="{% url 'my_appointment_list' %}">
+                        <i class="fas fa-file"></i>
+                        <span>
+                        Мои записи
+                    </span>
+                    </a>
                 </li>
             {% endif %}
+            {#        <li class="menu-item">#}
+            {#            <a href="{% url 'order_list' %}">#}
+            {#                <i class="fas fa-file"></i>#}
+            {#                <span>#}
+            {#                    Список завок#}
+            {#                </span>#}
+            {#            </a>#}
+            {#        </li>#}
+            <!-- /Schedule -->
+            <!-- Schedule -->
+            {#        <li class="menu-item">#}
+            {#            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#calendar-nav" aria-expanded="false"#}
+            {#               aria-controls="schedule">#}
+            {#                <span><i class="fas fa-calendar-alt"></i>Записи на приём</span>#}
+            {#            </a>#}
+            {#            <ul id="calendar-nav" class="collapse" aria-labelledby="calendar-nav" data-parent="#side-nav-accordion">#}
+            {#                {% if request.user.role != 'doctor' %}#}
+            {#                    <li><a href="#record_create" data-toggle="modal">Добавить запись</a></li>#}
+            {#                    <li><a href="{% url 'my_record_list' %}">Мои записи</a></li>#}
+            {##}
+            {#                {% endif %}#}
+            {##}
+            {#                <li><a href="{% url 'record_list' %}">Список записей</a></li>#}
+            {#            </ul>#}
+            {#        </li>#}
+            {% if request.user.role == 'admin' or request.user.is_superuser %}
+                <!-- Settings -->
+                <li class="menu-item">
+                    <a href="#"
+                       class="has-chevron {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}active{% endif %}"
+                       data-toggle="collapse" data-target="#cash" aria-expanded="false"
+                       aria-controls="doctor">
+                        <span><i class="fas fa-money-bill"></i>Касса</span>
+                    </a>
+                    <ul id="cash"
+                        class="collapse {% if path_name == 'cash_list' or path_name == 'cash_log_list' %}show{% endif %}"
+                        aria-labelledby="cash" data-parent="#side-nav-accordion">
+                        <li><a class="{% if path_name == 'cash_list' %}active{% endif %}" href="{% url 'cash_list' %}">Список
+                            касс</a></li>
+                        <li><a class="{% if path_name == 'cash_log_list' %}active{% endif %}"
+                               href="{% url 'cash_log_list' %}">Приходы и рассходы</a></li>
+                    </ul>
+                </li>
 
-            <li class="ms-nav-item ms-nav-user dropdown">
-                <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <img
-                        class="ms-user-img ms-img-round float-right"
-                        src="{% static 'assets/img/dashboard/doctor-3.jpg' %}" alt="people"> </a>
-                <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="userDropdown">
-                    <li class="dropdown-menu-header">
-                        <h6 class="dropdown-header ms-inline m-0"><span
-                                class="text-disabled">Добро пожаловать, {{ request.user.username }}</span></h6>
-                    </li>
-                    <li class="dropdown-divider"></li>
-                    <li class="dropdown-menu-footer">
-                        <a class="media fs-14 p-2" href="{% url 'logout' %}"> <span><i
-                                class="flaticon-shut-down mr-2"></i> Выйти из системы</span> </a>
-                    </li>
-                </ul>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cogs"></i>
+                        <span>
+                        Настройки
+                    </span>
+                    </a>
+                </li>
+                <!-- Settings -->
+            {% endif %}
+            <!-- /Schedule -->
+            <li class="menu-item">
+                <a href="https://miracle-network.uz" target="_blank">Powered by <b>Miracle
+                    Network</b></a>
             </li>
+
         </ul>
-        <div class="ms-toggler ms-d-block-sm pr-0 ms-nav-toggler" data-toggle="slideDown" data-target="#ms-nav-options">
-            <span class="ms-toggler-bar bg-white"></span>
-            <span class="ms-toggler-bar bg-white"></span>
-            <span class="ms-toggler-bar bg-white"></span>
-        </div>
-    </nav>
-    <!-- Body Content Wrapper -->
-    {% block content %}
-    {% endblock content %}
-</main>
-<!-- MODALS -->
-<!-- Reminder Modal -->
-<div class="modal fade" id="reminder-modal" tabindex="-1" role="dialog" aria-labelledby="reminder-modal">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary">
-                <h5 class="modal-title has-icon text-white"> New Reminder</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
+    </aside>
+    <!-- Main Content -->
+    <main class="body-content">
+        <!-- Navigation Bar -->
+        <nav class="navbar ms-navbar">
+            <div class="ms-aside-toggler ms-toggler pl-0" data-target="#ms-side-nav" data-toggle="slideLeft">
+                <span class="ms-toggler-bar bg-white"></span>
+                <span class="ms-toggler-bar bg-white"></span>
+                <span class="ms-toggler-bar bg-white"></span>
             </div>
-            <form>
-                <div class="modal-body">
-                    <div class="ms-form-group">
-                        <label>Remind me about</label>
-                        <textarea class="form-control" name="reminder"></textarea>
-                    </div>
-                    <div class="ms-form-group">
-                        <span class="ms-option-name fs-14">Repeat Daily</span>
-                        <label class="ms-switch float-right">
-                            <input type="checkbox">
-                            <span class="ms-switch-slider round"></span>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="ms-form-group">
-                                <input type="text" class="form-control datepicker" name="reminder-date" value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="ms-form-group">
-                                <select class="form-control" name="reminder-time">
-                                    <option value="">12:00 pm</option>
-                                    <option value="">1:00 pm</option>
-                                    <option value="">2:00 pm</option>
-                                    <option value="">3:00 pm</option>
-                                    <option value="">4:00 pm</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-secondary shadow-none" data-dismiss="modal">Add Reminder
+            <div class="logo-sn logo-sm ms-d-block-sm">
+                <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="{% url 'home-view' %}">
+                    Dentify
+                </a>
+            </div>
+            <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
+
+                {% if request.user.role != 'doctor' %}
+                    <li class="ms-nav-item  ms-d-none">
+                        <a href="#AppointmentCreateModal" class="text-white" data-toggle="modal"><i
+                                class="flaticon-spreadsheet mr-2"></i>
+                            Записать в очередь
+                        </a>
+                    </li>
+
+                    <li class="ms-nav-item ms-d-none">
+                        <a href="#prescription" class="text-white" data-toggle="modal"><i
+                                class="flaticon-pencil mr-2"></i>
+                            Зарегистрировать пациента</a>
+                    </li>
+                {% endif %}
+
+                <li class="ms-nav-item ms-nav-user dropdown">
+                    <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img
+                                class="ms-user-img ms-img-round float-right"
+                                src="{% static 'assets/img/dashboard/doctor-3.jpg' %}" alt="people"> </a>
+                    <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="userDropdown">
+                        <li class="dropdown-menu-header">
+                            <h6 class="dropdown-header ms-inline m-0"><span
+                                    class="text-disabled">Добро пожаловать, {{ request.user.username }}</span></h6>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-menu-footer">
+                            <a class="media fs-14 p-2" href="{% url 'logout' %}"> <span><i
+                                    class="flaticon-shut-down mr-2"></i> Выйти из системы</span> </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="ms-toggler ms-d-block-sm pr-0 ms-nav-toggler" data-toggle="slideDown"
+                 data-target="#ms-nav-options">
+                <span class="ms-toggler-bar bg-white"></span>
+                <span class="ms-toggler-bar bg-white"></span>
+                <span class="ms-toggler-bar bg-white"></span>
+            </div>
+        </nav>
+        <!-- Body Content Wrapper -->
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <!-- MODALS -->
+    <!-- Reminder Modal -->
+    <div class="modal fade" id="reminder-modal" tabindex="-1" role="dialog" aria-labelledby="reminder-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                    <h5 class="modal-title has-icon text-white"> New Reminder</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            </form>
+                <form>
+                    <div class="modal-body">
+                        <div class="ms-form-group">
+                            <label>Remind me about</label>
+                            <textarea class="form-control" name="reminder"></textarea>
+                        </div>
+                        <div class="ms-form-group">
+                            <span class="ms-option-name fs-14">Repeat Daily</span>
+                            <label class="ms-switch float-right">
+                                <input type="checkbox">
+                                <span class="ms-switch-slider round"></span>
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="ms-form-group">
+                                    <input type="text" class="form-control datepicker" name="reminder-date" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="ms-form-group">
+                                    <select class="form-control" name="reminder-time">
+                                        <option value="">12:00 pm</option>
+                                        <option value="">1:00 pm</option>
+                                        <option value="">2:00 pm</option>
+                                        <option value="">3:00 pm</option>
+                                        <option value="">4:00 pm</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary shadow-none" data-dismiss="modal">Add Reminder
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<!-- Notes Modal -->
-<div class="modal fade" id="notes-modal" tabindex="-1" role="dialog" aria-labelledby="notes-modal">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary">
-                <h5 class="modal-title has-icon text-white" id="NoteModal">New Note</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <div class="modal-body">
-                    <div class="ms-form-group">
-                        <label>Note Title</label>
-                        <input type="text" class="form-control" name="note-title" value="">
+    <!-- Notes Modal -->
+    <div class="modal fade" id="notes-modal" tabindex="-1" role="dialog" aria-labelledby="notes-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                    <h5 class="modal-title has-icon text-white" id="NoteModal">New Note</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="ms-form-group">
+                            <label>Note Title</label>
+                            <input type="text" class="form-control" name="note-title" value="">
+                        </div>
+                        <div class="ms-form-group">
+                            <label>Note Description</label>
+                            <textarea class="form-control" name="note-description"></textarea>
+                        </div>
                     </div>
-                    <div class="ms-form-group">
-                        <label>Note Description</label>
-                        <textarea class="form-control" name="note-description"></textarea>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary shadow-none" data-dismiss="modal">Add Note
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Make An Appointment</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Patient Information</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom01">Patient Name</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom01"
+                                                       placeholder="Enter Name" required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom02">Date Of Birth</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="validationCustom02"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom03">Disease</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom03"
+                                                       placeholder="Disease" required="">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-2">
+                                            <label for="validationCustom04">Address</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom04"
+                                                       placeholder="Add Address" required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom05">Phone no.</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom05"
+                                                       placeholder="Enter Phone No." required="">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom06">Department Name</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom06"
+                                                       placeholder="Enter Department Name" required="">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom07">Appointment With</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom07"
+                                                       placeholder="Enter Doctor Name" required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom08">Appointment Date</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom08"
+                                                       placeholder="Enter Appointment Date" required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Sex</label>
+                                            <ul class="ms-list d-flex">
+                                                <li class="ms-list-item pl-0">
+                                                    <label class="ms-checkbox-wrap">
+                                                        <input type="radio" name="radioExample" value="">
+                                                        <i class="ms-checkbox-check"></i>
+                                                    </label>
+                                                    <span> Male </span>
+                                                </li>
+                                                <li class="ms-list-item">
+                                                    <label class="ms-checkbox-wrap">
+                                                        <input type="radio" name="radioExample" value="" checked="">
+                                                        <i class="ms-checkbox-check"></i>
+                                                    </label>
+                                                    <span> Female </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning mt-4 d-inline w-20" type="submit">Reset</button>
+                                    <button class="btn btn-primary mt-4 d-inline w-20" type="submit">Add Appointment
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="prescription" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Регистрация пациента</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Информация о пациенте</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'patient_action' %}"
+                                      method="post">
+                                    <input type="hidden" name="action" value="create_patient">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom09">Ф.И.О пациента</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom09"
+                                                       placeholder="Введите Ф.И.О" name="fullname" required>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom12">Пол</label>
+                                            <div class="input-group">
+                                                <select class="form-control" name="gender" required>
+                                                    <option value="male">Мужчина</option>
+                                                    <option value="female">Женщина</option>
+                                                </select>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom10">Дата рождения</label>
+                                            <div class="input-group">
+                                                <input type="date" class="form-control" name="birthday"
+                                                       id="validationCustom10"
+                                                       required>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom12">Номер телефона</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom12"
+                                                       placeholder="Введите номер телефона" name="phone" required="">
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label for="validationCustom11">Адрес</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="validationCustom11"
+                                                       placeholder="Введите адрес" name="address" required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label for="validationCustom11">Источник</label>
+                                            <div class="input-group">
+                                                <select class="form-control" name="gender" required>
+                                                    <option value="" disabled selected>-------------</option>
+                                                    {% for patient_source in patient_sources %}
+                                                        <option value="{{ patient_source.pk }}">{{ patient_source.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom13">Тип документа</label>
+                                            <div class="input-group">
+                                                <select class="form-control" name="doc_type" required>
+                                                    <option value="passport">Паспорт</option>
+                                                    <option value="metrics">Метрика</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom14">Серия документа</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="doc_series"
+                                                       id="validationCustom14"
+                                                       placeholder="Введите серию документа" required="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom14">Номер документа</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="doc_number"
+                                                       id="validationCustom14"
+                                                       placeholder="Введите номер документа" required="">
+                                                <input type="text" hidden class="form-control" name="image"
+                                                       id="patient-image"
+                                                       accept="image/*;capture=camera"
+                                                       placeholder="Выберите файл">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="checkbox_patient_is_active_create" checked>
+                                                <label class="form-check-label">
+                                                    Активен
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="validationCustom10">Дата последнего визита стоматолога</label>
+                                            <div class="input-group">
+                                                <input type="date" class="form-control" name="last_visit"
+                                                       id="validationCustom10">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-3"><br/>
+
+                                            <style>  #my_camera {
+                                                width: 100%;
+                                                height: 240px;
+                                                border: 1px solid black;
+                                            } </style>
+                                            <div id="my_camera"></div>
+                                            <hr/>
+                                            <button type="button" onClick="start_camera()"
+                                                    class="btn btn-success btn-block btn-sm">
+                                                <span class="glyphicon glyphicon-camera"></span>
+                                                Запустить камеру
+                                            </button>
+                                            <button type="button" onClick="take_snapshot()"
+                                                    class="btn btn-primary btn-block btn-sm">
+                                                <span class="glyphicon glyphicon-camera"></span>
+                                                Снять фото
+                                            </button>
+                                            <!-- Webcam.min.js -->
+                                            <script type="text/javascript"
+                                                    src="{% static 'assets/webcamjs/webcam.min.js' %}"></script>
+                                            <!-- Configure a few settings and attach camera -->
+                                            <script language="JavaScript">
+                                                function start_camera() {
+                                                    Webcam.set({
+                                                        width: 300,
+                                                        height: 240,
+                                                        image_format: 'jpeg',
+                                                        jpeg_quality: 90
+                                                    });
+                                                    Webcam.attach('#my_camera');
+                                                }
+
+                                                <!-- Code to handle taking the snapshot and displaying it locally -->
+                                                function take_snapshot() {
+                                                    // take snapshot and get image data
+                                                    Webcam.snap(function (data_uri) {
+                                                        // display results in page
+                                                        document.getElementById('patient-image').value = data_uri;
+                                                        document.getElementById('results').innerHTML =
+                                                            '<img src="' + data_uri + '"/>';
+                                                    });
+                                                }
+                                            </script>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-5"><br/>
+                                            <div id="results" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="appointment_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Добавить запись на приём</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
+
+                </div>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали записи</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'appointment_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_appointment">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Пациент</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="patient_id"
+                                                        id="select_patient_main">
+                                                    <option disabled selected>Выберите пациента</option>
+                                                    {% for patient in patients %}
+                                                        <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Доктор</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="doctor_id"
+                                                        id="select_doctor_main">
+                                                    <option disabled selected>Выберите доктора</option>
+                                                    {% for doctor in doctors %}
+                                                        <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="validationCustom01">Время записи</label>
+                                            <div class="input-group">
+                                                <input type="datetime-local" name="date" class="form-control"
+                                                       id="validationCustom01"
+                                                       required="">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Контент</label>
+                                            <div class="input-group">
+                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
+                                            </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AppointmentCreateModal" tabindex="-1" aria-labelledby="AppointmentCreateModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AppointmentCreateModalLabel">
+                        Новая запись на приём
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                </div>
+                <form method="post" id="id_form_appointment_create" action="{% url 'appointment_action' %}"
+                      class="modal-body">
+                    <input type="hidden" name="action" value="create_appointment">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Тип записи:</label>
+                            <select name="appointment_type" class="form-control" required>
+                                <option value="" disabled selected>-----------</option>
+                                <option value="">Лечение</option>
+                                <option value="">Консультация</option>
+                                <option value="">Диагностика</option>
+                                <option value="">Осмотр</option>
+                                <option value="">Санация</option>
+                                <option value="">Курация</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Врач:</label>
+                            <select name="doctor" id="id_select_doctor" class="form-control" style="width: 100%"
+                                    required>
+                                <option value="" disabled selected>-</option>
+                                {% for doctor in doctors %}
+                                    <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Дата визита:</label>
+                            <input type="date" class="form-control" name="appointment_date"
+                                   id="id_input_appointment_date" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Время визита:</label>
+                            <input type="time" class="form-control" name="appointment_time"
+                                   id="id_input_appointment_time" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Продолжительность:</label>
+                            <input type="number" name="duration" id="id_input_duration" class="form-control" value="30"
+                                   min="30" step="30" required>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-8">
+                            <label class="form-label">Пациент:</label>
+                            <select name="patient" id="id_select_patient" class="form-control" style="width: 100%"
+                                    required>
+                                <option value="" disabled selected>-</option>
+                                {% for patient in patients %}
+                                    <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <a onclick="create_patient_click()" class="btn btn-outline-primary"
+                               style="margin-top: 30px">Создать пациента</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <label class="form-label">Описание:</label>
+                            <textarea name="description" class="form-control" cols="30" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </form>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-secondary shadow-none" data-dismiss="modal">Add Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog ms-modal-dialog-width">
-        <div class="modal-content ms-modal-content-width">
-            <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Make An Appointment</h4>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">x</button>
-
-            </div>
-            <div class="modal-body p-0 text-left">
-                <div class="col-xl-12 col-md-12">
-                    <div class="ms-panel ms-panel-bshadow-none">
-                        <div class="ms-panel-header">
-                            <h6>Patient Information</h6>
-                        </div>
-                        <div class="ms-panel-body">
-                            <form class="needs-validation" novalidate="">
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom01">Patient Name</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom01"
-                                                   placeholder="Enter Name" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom02">Date Of Birth</label>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="validationCustom02"
-                                                   required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom03">Disease</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom03"
-                                                   placeholder="Disease" required="">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-2">
-                                        <label for="validationCustom04">Address</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom04"
-                                                   placeholder="Add Address" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom05">Phone no.</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom05"
-                                                   placeholder="Enter Phone No." required="">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom06">Department Name</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom06"
-                                                   placeholder="Enter Department Name" required="">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom07">Appointment With</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom07"
-                                                   placeholder="Enter Doctor Name" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom08">Appointment Date</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom08"
-                                                   placeholder="Enter Appointment Date" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label>Sex</label>
-                                        <ul class="ms-list d-flex">
-                                            <li class="ms-list-item pl-0">
-                                                <label class="ms-checkbox-wrap">
-                                                    <input type="radio" name="radioExample" value="">
-                                                    <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Male </span>
-                                            </li>
-                                            <li class="ms-list-item">
-                                                <label class="ms-checkbox-wrap">
-                                                    <input type="radio" name="radioExample" value="" checked="">
-                                                    <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Female </span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <button class="btn btn-warning mt-4 d-inline w-20" type="submit">Reset</button>
-                                <button class="btn btn-primary mt-4 d-inline w-20" type="submit">Add Appointment
-                                </button>
-                            </form>
-                        </div>
-
-                    </div>
+                    <button type="submit" form="id_form_appointment_create" class="btn btn-primary btn-add-event">
+                        Сохранить
+                    </button>
                 </div>
             </div>
-
         </div>
     </div>
-</div>
+    <!-- Modal -->
+    <div class="modal fade" id="order_create" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header  ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Создать визит</h4>
+                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
 
-
-<!-- Modal -->
-<div class="modal fade" id="prescription" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog ms-modal-dialog-width">
-        <div class="modal-content ms-modal-content-width">
-            <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Регистрация пациента</h4>
-                <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
-
-            </div>
-            <div class="modal-body p-0 text-left">
-                <div class="col-xl-12 col-md-12">
-                    <div class="ms-panel ms-panel-bshadow-none">
-                        <div class="ms-panel-header">
-                            <h6>Информация о пациенте</h6>
-                        </div>
-                        <div class="ms-panel-body">
-                            <form class="needs-validation" novalidate="" action="{% url 'patient_action' %}"
-                                  method="post">
-                                <input type="hidden" name="action" value="create_patient">
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom09">Ф.И.О пациента</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom09"
-                                                   placeholder="Введите Ф.И.О" name="fullname" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom10">Дата рождения</label>
-                                        <div class="input-group">
-                                            <input type="date" class="form-control" name="birthday"
-                                                   id="validationCustom10"
-                                                   required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom10">Дата последнего визита стоматолога</label>
-                                        <div class="input-group">
-                                            <input type="date" class="form-control" name="last_visit"
-                                                   id="validationCustom10"
-                                                   required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-2">
-                                        <label for="validationCustom11">Адрес</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom11"
-                                                   placeholder="Введите адрес" name="address" required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom12">Номер телефона</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="validationCustom12"
-                                                   placeholder="Введите номер телефона" name="phone" required="">
-
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom12">Пол</label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="gender" required>
-                                                <option value="male">Мужчина</option>
-                                                <option value="female">Женщина</option>
-                                            </select>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div class="form-row">
-
-
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom13">Тип документа</label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="doc_type" required>
-                                                <option value="passport">Паспорт</option>
-                                                <option value="metrics">Метрика</option>
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom14">Серия документа</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="doc_series"
-                                                   id="validationCustom14"
-                                                   placeholder="Введите серию документа" required="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="validationCustom14">Номер документа</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="doc_number"
-                                                   id="validationCustom14"
-                                                   placeholder="Введите номер документа" required="">
-                                            <input type="text" hidden class="form-control" name="image"
-                                                   id="patient-image"
-                                                   accept="image/*;capture=camera"
-                                                   placeholder="Выберите файл" required="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-3"><br/>
-
-                                        <style>  #my_camera {
-                                            width: 100%;
-                                            height: 240px;
-                                            border: 1px solid black;
-                                        } </style>
-                                        <div id="my_camera"></div>
-                                        <hr/>
-                                        <button type="button" onClick="start_camera()"
-                                                class="btn btn-success btn-block btn-sm">
-                                            <span class="glyphicon glyphicon-camera"></span>
-                                            Запустить камеру
-                                        </button>
-                                        <button type="button" onClick="take_snapshot()"
-                                                class="btn btn-primary btn-block btn-sm">
-                                            <span class="glyphicon glyphicon-camera"></span>
-                                            Снять фото
-                                        </button>
-                                        <!-- Webcam.min.js -->
-                                        <script type="text/javascript"
-                                                src="{% static 'assets/webcamjs/webcam.min.js' %}"></script>
-                                        <!-- Configure a few settings and attach camera -->
-                                        <script language="JavaScript">
-                                            function start_camera() {
-                                                Webcam.set({
-                                                    width: 300,
-                                                    height: 240,
-                                                    image_format: 'jpeg',
-                                                    jpeg_quality: 90
-                                                });
-                                                Webcam.attach('#my_camera');
-                                            }
-
-                                            <!-- Code to handle taking the snapshot and displaying it locally -->
-                                            function take_snapshot() {
-                                                // take snapshot and get image data
-                                                Webcam.snap(function (data_uri) {
-                                                    // display results in page
-                                                    document.getElementById('patient-image').value = data_uri;
-                                                    document.getElementById('results').innerHTML =
-                                                        '<img src="' + data_uri + '"/>';
-                                                });
-                                            }
-                                        </script>
-                                    </div>
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-5"><br/>
-                                        <div id="results" style="width: 100%;"></div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
-                            </form>
-                        </div>
-
-                    </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="record_create" role="dialog" aria-hidden="true">
-    <div class="modal-dialog ms-modal-dialog-width">
-        <div class="modal-content ms-modal-content-width">
-            <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Добавить запись на приём</h4>
-                <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
-
-            </div>
-            <div class="modal-body p-0 text-left">
-                <div class="col-xl-12 col-md-12">
-                    <div class="ms-panel ms-panel-bshadow-none">
-                        <div class="ms-panel-header">
-                            <h6>Детали записи</h6>
-                        </div>
-                        <div class="ms-panel-body">
-                            <form class="needs-validation" novalidate="" action="{% url 'record_action' %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="create_record">
-                                <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom09">Пациент</label>
-                                        <div class="input-group">
-                                            <select class="form-control" style="width: 100%" name="patient_id"
-                                                    id="select_patient_main">
-                                                <option disabled selected>Выберите пациента</option>
-                                                {% for patient in patients %}
-                                                    <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
-                                                {% endfor %}
-                                            </select>
+                <div class="modal-body p-0 text-left">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Детали визита</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form class="needs-validation" novalidate="" action="{% url 'order_action' %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="create_order">
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom09">Пациент</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="patient"
+                                                        id="select_patient">
+                                                    {% for patient in patients %}
+                                                        <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom10">Доктор</label>
-                                        <div class="input-group">
-                                            <select class="form-control" style="width: 100%" name="doctor_id"
-                                                    id="select_doctor_main">
-                                                <option disabled selected>Выберите доктора</option>
-                                                {% for doctor in doctors %}
-                                                    <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
-                                                {% endfor %}
-                                            </select>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validationCustom10">Доктор</label>
+                                            <div class="input-group">
+                                                <select class="form-control" style="width: 100%" name="doctor"
+                                                        id="select_doctor">
+                                                    {% for doctor in doctors %}
+                                                        <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="validationCustom01">Время записи</label>
-                                        <div class="input-group">
-                                            <input type="datetime-local" name="date" class="form-control"
-                                                   id="validationCustom01"
-                                                   required="">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
-                                        <label for="validationCustom11">Контент</label>
-                                        <div class="input-group">
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Жалобы</label>
+                                            <div class="input-group">
                                             <textarea class="form-control" name="content" id="" cols="30" rows="10">
                                             </textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="order_create" role="dialog" aria-hidden="true">
-    <div class="modal-dialog ms-modal-dialog-width">
-        <div class="modal-content ms-modal-content-width">
-            <div class="modal-header  ms-modal-header-radius-0">
-                <h4 class="modal-title text-white">Создать визит</h4>
-                <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
-
-            </div>
-            <div class="modal-body p-0 text-left">
-                <div class="col-xl-12 col-md-12">
-                    <div class="ms-panel ms-panel-bshadow-none">
-                        <div class="ms-panel-header">
-                            <h6>Детали визита</h6>
-                        </div>
-                        <div class="ms-panel-body">
-                            <form class="needs-validation" novalidate="" action="{% url 'order_action' %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="create_order">
-                                <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom09">Пациент</label>
-                                        <div class="input-group">
-                                            <select class="form-control" style="width: 100%" name="patient"
-                                                    id="select_patient">
-                                                {% for patient in patients %}
-                                                    <option value="{{ patient.pk }}">{{ patient.fullname }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validationCustom10">Доктор</label>
-                                        <div class="input-group">
-                                            <select class="form-control" style="width: 100%" name="doctor"
-                                                    id="select_doctor">
-                                                {% for doctor in doctors %}
-                                                    <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
-                                        <label for="validationCustom11">Жалобы</label>
-                                        <div class="input-group">
-                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
-                                        <label for="validationCustom11">Диагноз</label>
-                                        <div class="input-group">
+                                        <div class="col-md-12 mb-2">
+                                            <label for="validationCustom11">Диагноз</label>
+                                            <div class="input-group">
                                             <textarea class="form-control" name="diagnosis" id="" cols="30" rows="10">
                                             </textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
-                            </form>
-                        </div>
+                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
+                                </form>
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
 
 {% endwith %}
 <!-- SCRIPTS -->
@@ -820,47 +939,19 @@
 <script src="{% static 'assets/js/settings.js' %}"></script>
 <!-- select2 -->
 <script src="{% static 'assets/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'custom/js/index.js' %}"></script>
+<script src="{% static 'assets/js/input-mask/index.js' %}"></script>
+
 {% block extra_js %}
 {% endblock extra_js %}
 <script>
-    async function send_post(url, data, message) {
-        let form_data = new FormData();
-        for (let key in data) {
-            form_data.append(key, data[key]);
-        }
-        console.log(message)
-        if (message) {
-            let confirmation = confirm(message)
-            if (confirmation === true) {
-                const response = await fetch(url, {
-                    method: "post",
-                    cache: 'no-cache',
-                    body: form_data
-                })
-                    .then(response => {
-                        console.log(response);
-                        window.location = response['url']
-                    })
-                    .catch(response => {
-                        alert('Error')
-                    })
-            }
-        } else {
-            const response = await fetch(url, {
-                method: "post",
-                cache: 'no-cache',
-                body: form_data
-            })
-                .then(response => {
-                    console.log(response);
-                    window.location = response['url']
-                })
-                .catch(response => {
-                    alert('Error')
-                })
-        }
+    function create_patient_click() {
+        $(`#AppointmentCreateModal`).modal('hide');
 
-
+        // Открыть нужное модальное окно
+        setTimeout(function () {
+            $('#prescription').modal('show');
+        }, 500);
     }
 </script>
 

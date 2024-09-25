@@ -14,7 +14,7 @@
                         <button type="submit" class="btn btn-primary">Фильтр</button>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'my_record_list' %}" class="btn btn-danger ml-3">Сброс</a>
+                        <a href="{% url 'my_appointment_list' %}" class="btn btn-danger ml-3">Сброс</a>
                     </div>
                 </form>
             </div>
@@ -23,19 +23,19 @@
 
                     <div class="col-md-6">
                         {% if send_tg_to_patients %}
-                            <a onclick="send_post('{% url 'record_action' %}', {'action': 'send_sms_today_patients', 'user_id': {{ request.user.id }} }, 'Вы действительно хотите отправить смс сегодняшним пациентам?')"
+                            <a onclick="send_post('{% url 'appointment_action' %}', {'action': 'send_sms_today_patients', 'user_id': {{ request.user.id }} }, 'Вы действительно хотите отправить смс сегодняшним пациентам?')"
                                class="btn btn-primary float-right text-white">Отправить смс</a>
                         {% endif %}
                     </div>
                     <div class="col-md-6">
-                        <a href="#record_create" class="ms-text-primary float-right" data-toggle="modal">Добавить</a>
+                        <a href="#appointment_create" class="ms-text-primary float-right" data-toggle="modal">Добавить</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="ms-panel-body">
             <div class="table-responsive">
-                <table id="record_data_table" class="table table-striped thead-primary w-100">
+                <table id="appointment_data_table" class="table table-striped thead-primary w-100">
                     <thead>
                     <tr role="row">
                         <th tabindex="0" aria-controls="example" rowspan="1"
@@ -86,31 +86,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for record in records %}
+                    {% for appointment in appointments %}
                         <tr role="row">
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ record.registrar.fullname }}</td>
-                            <td>{{ record.patient }}</td>
-                            <td>{{ record.doctor }}</td>
-                            <td>{{ record.created }}</td>
-                            <td>{{ record.date }}</td>
-                            <td>{{ record.content }}</td>
+                            <td>{{ appointment.registrar.fullname }}</td>
+                            <td>{{ appointment.patient }}</td>
+                            <td>{{ appointment.doctor }}</td>
+                            <td>{{ appointment.created }}</td>
+                            <td>{{ appointment.date }}</td>
+                            <td>{{ appointment.content }}</td>
                             <td>
-                                {% if record.sent %}
+                                {% if appointment.sent %}
                                     <i class="fa fa-check-circle text-success"></i>
                                 {% else %}
                                     <i class="fa fa-times-circle text-danger"></i>
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'send_notification' record.pk %}"><i
+                                <a href="{% url 'send_notification' appointment.pk %}"><i
                                         class="text-info fa fa-bell"></i></a>
 
-                                <a href="{% url 'patient_detail' record.patient_id %}"><i
+                                <a href="{% url 'patient_detail' appointment.patient_id %}"><i
                                         class="text-success fa fa-user-alt"></i></a>
-                                <a href="{% url 'record_update' record.pk %}"><i
+                                <a href="{% url 'appointment_update' appointment.pk %}"><i
                                         class="text-primary fa fa-pencil-alt"></i></a>
-                                <a onclick="send_post('{% url 'record_action' %}', {'action': 'delete_record', 'record_id': '{{ record.pk }}'}, 'Вы действительно хотите удалить запись?')"><i
+                                <a onclick="send_post('{% url 'appointment_action' %}', {'action': 'appointment_record', 'record_id': '{{ appointment.pk }}'}, 'Вы действительно хотите удалить запись?')"><i
                                         class="text-danger fa fa-trash-alt"></i></a>
                             </td>
                         </tr>

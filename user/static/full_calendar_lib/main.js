@@ -4707,7 +4707,7 @@ var FullCalendar = (function (exports) {
 
     /*
     Records offset information for a set of elements, relative to an origin element.
-    Can record the left/right OR the top/bottom OR both.
+    Can appointment the left/right OR the top/bottom OR both.
     Provides methods for querying the cache by position.
     */
     var PositionCache = /** @class */ (function () {

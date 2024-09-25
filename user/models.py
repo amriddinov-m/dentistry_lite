@@ -3,7 +3,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 
-from company.models import BranchableModel
+from company.models import BranchableModel, BranchManager
 
 
 class MyUserManager(BaseUserManager):
@@ -12,29 +12,27 @@ class MyUserManager(BaseUserManager):
     instead of usernames. The default that's used is "UserManager"
     """
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, phone, password=None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
-        user = self.model(username=username, **extra_fields)
+        user = self.model(phone=phone, **extra_fields)
         user.set_password(password)
         user.is_active = True
-        user.user_type = 'user'
         user.save()
         return user
 
-    def _create_user(self, username, password=None, **extra_fields):
+    def _create_user(self, phone, password=None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
-        user = self.model(username=username, **extra_fields)
+        user = self.model(phone=phone, **extra_fields)
         user.is_active = True
         user.set_password(password)
-        user.user_type = 'user'
         user.save()
         return user
 
-    def create_superuser(self, username, password, **extra_fields):
+    def create_superuser(self, phone, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -43,7 +41,7 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        return self._create_user(username, password, **extra_fields)
+        return self._create_user(phone, password, **extra_fields)
 
 
 class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
@@ -57,9 +55,9 @@ class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
         disabled = 'disabled', 'Не активный'
 
     fullname = models.CharField(verbose_name='Ф.И.О', max_length=255)
-    username = models.CharField(verbose_name='Имя пользователя', max_length=255, unique=True)
+    username = models.CharField(verbose_name='Имя пользователя', max_length=255, unique=True, null=True, blank=True)
     role = models.CharField(verbose_name='Роль', max_length=255, choices=Role.choices)
-    phone = models.CharField(verbose_name='Телефон', max_length=20)
+    phone = models.CharField(verbose_name='Телефон', max_length=20, unique=True)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
     address = models.CharField(verbose_name='Адрес', max_length=255)
     start_time = models.TimeField(verbose_name='Время начала работы', null=True)
@@ -81,8 +79,9 @@ class User(AbstractBaseUser, BranchableModel, PermissionsMixin):
     )
 
     birthday = models.DateField(verbose_name='Дата рождения', null=True, blank=True)
-    USERNAME_FIELD = 'username'
-    objects = MyUserManager()
+    USERNAME_FIELD = 'phone'
+    super_objects = MyUserManager()
+    objects = BranchManager()
 
     def __str__(self):
         return self.fullname

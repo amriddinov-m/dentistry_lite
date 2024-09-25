@@ -5,8 +5,8 @@
     <title>Bot List</title>
 </head>
 <body>
-{% for record in records %}
-    {{ record.patient.fullname }} - {{ record.date }}
+{% for appointment in appointments %}
+    {{ appointment.patient.fullname }} - {{ appointment.date }}
 {% endfor %}
 </body>
 </html>

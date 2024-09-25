@@ -6109,8 +6109,8 @@ a.ms-g-plus,
 .ms-profile-cover img {
     width: 200px;
     margin-bottom: -35px;
-    border: 3px solid #fff;
-    border-radius: 5px;
+    /*border: 3px solid #fff;*/
+    /*border-radius: 5px;*/
 }
 
 .ms-profile-user-info,
@@ -8474,7 +8474,7 @@ body:not(.ms-settings-open) .ms-settings-toggle:hover {
     transform: translate3d(0, 0, 0);
     width: 100%;
     margin: 0 auto;
-    height: 488px;
+    /*height: 488px;*/
     overflow: hidden;
 }
 

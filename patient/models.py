@@ -30,6 +30,8 @@ class Patient(BranchableModel):
     doc_number = models.CharField(verbose_name='Номер документа', max_length=7)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
     chat_id = models.BigIntegerField(verbose_name='Телеграм айди', default=0)
+    source = models.ForeignKey('patient.PatientSource', on_delete=models.SET_NULL, verbose_name='Источник',
+                               null=True)
     registrar = models.ForeignKey('user.User',
                                   verbose_name='Регистрировал',
                                   on_delete=models.PROTECT)
@@ -45,29 +47,50 @@ class Patient(BranchableModel):
         verbose_name_plural = 'Пациенты'
 
 
-class Record(BranchableModel):
-    patient = models.ForeignKey('Patient',
-                                on_delete=models.PROTECT,
-                                verbose_name='Пациент')
-    doctor = models.ForeignKey('user.User',
-                               on_delete=models.PROTECT,
-                               verbose_name='Доктор')
-    date = models.DateTimeField(verbose_name='Дата записи')
-    content = models.TextField(verbose_name='Контент', null=True)
-    created = models.DateTimeField('Дата создания', auto_now_add=True)
-    updated = models.DateTimeField('Дата обновления', auto_now=True)
-    registrar = models.ForeignKey('user.User',
-                                  related_name='registrar',
-                                  verbose_name='Регистрировал',
-                                  on_delete=models.PROTECT)
+class Appointment(BranchableModel):
+    class AppointmentType(models.TextChoices):
+        treatment = 'treatment', 'Лечение'
+        consultation = 'consultation', 'Консультация'
+        diagnostics = 'diagnostics', 'Диагностика'
+        inspection = 'inspection', 'Осмотр'
+        sanitation = 'sanitation', 'Санация'
+    patient = models.ForeignKey('patient.Patient', on_delete=models.CASCADE, verbose_name='Пациент')
+    appointment_type = models.CharField(max_length=255, verbose_name='Тип записи',
+                                        choices=AppointmentType.choices,
+                                        default=AppointmentType.treatment)
+    doctor = models.ForeignKey('user.User', related_name='appointments', on_delete=models.PROTECT, verbose_name='Доктор')
+    appointment_date = models.DateTimeField(verbose_name='Назначенная дата')
+    duration = models.IntegerField(default=30, verbose_name='Длительность')
+    description = models.TextField(verbose_name='Описание', null=True)
+    creator = models.ForeignKey('user.User',
+                                verbose_name='Добавил', null=True,
+                                on_delete=models.PROTECT)
+
     sent = models.BooleanField(default=False)
 
     objects = BranchManager()
     all_objects = DefaultManager()
 
     def __str__(self):
-        return f'{self.patient} | {self.doctor} | {self.date}'
+        return f'Запись для {self.patient} к {self.doctor} на {self.appointment_date}'
 
     class Meta:
         verbose_name = 'Запись на прием'
         verbose_name_plural = 'Запись на прием'
+
+
+class PatientSource(BranchableModel):
+    name = models.CharField(max_length=255, unique=True, verbose_name='Название')
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+    created = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated = models.DateTimeField('Дата обновления', auto_now=True)
+
+    objects = BranchManager()
+    all_objects = DefaultManager()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Источник пациентов'
+        verbose_name_plural = 'Источник пациентов'

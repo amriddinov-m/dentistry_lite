@@ -1,6 +1,6 @@
 import datetime
 
-from patient.models import Patient, Record
+from patient.models import Patient, Appointment, PatientSource
 from user.models import User
 from django.core.exceptions import PermissionDenied
 
@@ -11,9 +11,10 @@ def pages(request):
         data = {
             'patients': Patient.objects.filter(status='active'),
             'doctors': User.objects.filter(role__in=['doctor', 'admin']),
-            'records_today': Record.objects.filter(date__year=datetime_now.year,
-                                                   date__month=datetime_now.month,
-                                                   date__day=datetime_now.day)
+            'appointment_today': Appointment.objects.filter(appointment_date__year=datetime_now.year,
+                                                            appointment_date__month=datetime_now.month,
+                                                            appointment_date__day=datetime_now.day),
+            'patient_sources': PatientSource.objects.filter(is_active=True)
         }
     except Exception as err:
         print(err)

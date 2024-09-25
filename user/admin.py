@@ -7,12 +7,12 @@ from user.models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_display = 'username', 'fullname', 'role', 'is_superuser',
+    list_display = 'phone', 'fullname', 'role', 'is_superuser',
     filter_horizontal = 'user_permissions',
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('phone', 'password')}),
         ('Personal info', {'fields': (
-            'branch', 'fullname', 'role', 'birthday', 'start_time', 'end_time', 'phone', 'address')}),
+            'branch', 'fullname', 'role', 'birthday', 'start_time', 'end_time', 'address')}),
     )
 
 

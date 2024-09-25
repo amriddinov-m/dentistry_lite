@@ -32,8 +32,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/admin(.*)$',
     '/api/v1/(.*)$',
-    '/accounts/login/',
     '/bot/send/',
+    '/login/',
 )
 ALLOWED_HOSTS = ['*']
 

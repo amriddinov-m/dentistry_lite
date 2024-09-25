@@ -35,7 +35,7 @@ class RequireLoginMiddleware(object):
         # wrapped with the login_required decorator
         for url in self.required:
             if url.match(request.path):
-                return login_required(view_func)(request, *view_args, **view_kwargs)
+                return login_required(view_func, login_url='/login/')(request, *view_args, **view_kwargs)
 
         # Explicitly return None for all non-matching requests
         return None

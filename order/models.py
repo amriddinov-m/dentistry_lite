@@ -51,9 +51,9 @@ class OrderItem(models.Model):
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     updated = models.DateTimeField('Дата обновления', auto_now=True)
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
-    price = models.FloatField(verbose_name='Цена', default=0)
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Цена')
     count = models.IntegerField(verbose_name='Кол-во', default=0)
-    amount = models.FloatField(verbose_name='Сумма', default=0)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Сумма')
     tooth = models.IntegerField(verbose_name='Номер зуба', default=0)
     registrar = models.ForeignKey('user.User',
                                   verbose_name='Регистрировал',

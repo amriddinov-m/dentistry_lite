@@ -13,7 +13,7 @@ class Cash(BranchableModel):
         card = 'card', 'Перевод'
 
     name = models.CharField(verbose_name='Название', max_length=255)
-    amount = models.FloatField(verbose_name='Сумма', default=0)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Сумма')
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     updated = models.DateTimeField('Дата обновления', auto_now=True)
@@ -60,7 +60,7 @@ class CashLog(BranchableModel):
                                 default=Category.order_payment)
     model_type = models.CharField(verbose_name='Категория', max_length=255, choices=ModelType.choices)
     model_id = models.IntegerField(verbose_name='Причина', default=0)
-    amount = models.FloatField(verbose_name='Сумма', default=0)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Сумма')
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     creator = models.ForeignKey('user.User',
                                 verbose_name='Добавил',

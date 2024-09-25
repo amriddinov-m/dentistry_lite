@@ -1,53 +1,14 @@
 {% extends 'layout/base.html' %}
-{% load static %}
+{% load static poll_extras %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'full_calendar_lib/main.css' %}">
+    <style>
+        .fc .fc-timegrid-slot {
+            height: 2em;
+        }
+    </style>
 {% endblock extra_css %}
-{% block extra_js %}
-    <script src="{% static 'full_calendar_lib/main.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let calendarEl = document.getElementById('calendar');
-            let d = new Date()
 
-            let calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'ru',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'listMonth,timeGridWeek'
-                },
-                initialDate: d,
-                initialView: 'listMonth',
-                buttonText:
-                    {
-                        today: "Сегодня",
-                        month: "Месяц",
-                        week: "Неделя",
-                        day: "День",
-                        list: "Список по дням"
-                    },
-                navLinks: true, // can click day/week names to navigate views
-                businessHours: true, // display business hours
-
-                editable: false,
-                selectable: true,
-                events: [
-                    {% for record in records %}
-                        {
-                            id: {{ record.id }},
-                            title: '{{ record.patient.fullname }} - {{ record.date|date:"H:i" }}',
-                            start: '{{ record.date|date:'Y-m-d H:i' }}',
-                            end: '{{ record.date|date:'Y-m-d H:i' }}',
-                            url: '{% url 'patient_detail' record.patient_id %}'
-                        },
-                    {% endfor %}
-                ]
-            });
-            calendar.render();
-        });
-    </script>
-{% endblock extra_js %}
 {% block content %}
     <div class="ms-content-wrapper">
         <div class="row">
@@ -94,12 +55,12 @@
                     </a>
                 </div>
                 <div class="col-xl-3 col-md-6 col-sm-6">
-                    <a href="{% url 'record_list' %}">
+                    <a href="{% url 'appointment_list' %}">
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                             <div class="ms-card-body media">
                                 <div class="media-body">
                                     <h6 class="bold">Записей</h6>
-                                    <p class="ms-card-change"> {{ records.count }}</p>
+                                    <p class="ms-card-change"> {{ appointments.count }}</p>
                                 </div>
                             </div>
                             <i class="fas fa-calendar ms-icon-mr"></i>
@@ -118,4 +79,123 @@
             </div>
         </div>
     </div>
+
+
 {% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'full_calendar_lib/main.js' %}"></script>
+    <script>
+        function formatDate(date) {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear(),
+                hour = '' + d.getHours(),
+                minute = '' + d.getMinutes(),
+                seconds = '' + d.getSeconds();
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+            if (hour.length < 2) hour = '0' + hour;
+            if (minute.length < 2) minute = '0' + minute;
+            if (seconds.length < 2) seconds = '0' + seconds;
+            let result_date = [year, month, day].join('-')
+            let result_time = [hour, minute, seconds].join(':')
+            return `${result_date} ${result_time}`;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            $('#id_select_doctor, #id_select_patient').select2({
+                dropdownParent: $('#AppointmentCreateModal')
+            })
+
+            let calendarEl = document.getElementById('calendar');
+            let d = new Date()
+
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'ru',
+                nowIndicator: true,
+                customButtons: {
+                    myCustomButton: {
+                        text: 'Добавить запись на прием',
+                        class: 'btn btn-primary rounded-pill',
+                        click: function () {
+                            $('#AppointmentCreateModal').modal('toggle')
+                        }
+                    }
+                },
+                headerToolbar: {
+                    right: 'prev,next myCustomButton'
+                },
+                contentHeight: "auto",
+                initialView: 'timeGridWeek',
+                snapDuration: '00:30',
+                {#slotDuration: '00:15',#}
+                slotLabelInterval: '00:15:00',
+                slotLabelFormat:
+                    {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        omitZeroMinute: false,
+                    },
+                defaultTimedEventDuration: "00:30:00",
+                slotMinTime: '09:00:00', // Start time for the calendar
+                slotMaxTime: '19:00:00',
+                initialDate: d,
+                navLinks: true, // can click day/week names to navigate views
+                businessHours: true, // display business hours
+                editable: true,
+                selectable: true,
+                eventClick: function (arg) {
+                    alert('SSS')
+                },
+                select: function (arg) {
+                    let appointment_date = formatDate(arg.start)
+                    const dateStr = appointment_date.split(' ')[0];
+                    const timeStr = appointment_date.split(' ')[1];
+                    let duration = Math.floor(Math.abs(arg.start - arg.end) / 60000)
+                    $('#id_input_appointment_date').val(dateStr)
+                    $('#id_input_appointment_time').val(timeStr)
+                    $('#id_input_duration').val(duration)
+                    $('#AppointmentCreateModal').modal('toggle')
+                },
+                eventDataTransform: function (event) {
+                    console.log(event)
+                },
+                eventChange: function (arg) {
+                    let appointment_id = arg.event._def.publicId
+                    let appointment_date = formatDate(arg.event.start)
+                    let duration = Math.floor(Math.abs(arg.event.start - arg.event.end) / 60000)
+                    let confirmation = confirm('Вы действительно хотите переместить запись?')
+                    if (confirmation === true) {
+                        fetch_post('{% url 'appointment_action' %}',
+                            {
+                                'action': 'update_appointment_date',
+                                'appointment_id': appointment_id,
+                                'appointment_date': appointment_date,
+                                'duration': duration,
+                            })
+                    } else {
+                        arg.revert();
+                    }
+                },
+                events: [
+                    {% for appointment in appointments %}
+                        {
+                            id: '{{ appointment.pk }}',
+                            title: '{{ appointment.patient.fullname }}',
+                            start: '{{ appointment.appointment_date|date:'Y-m-d H:i' }}',
+                            end: '{{ appointment.appointment_date|calculate_appointment_date:appointment.duration|date:'Y-m-d H:i' }}'
+                        },
+                    {% endfor %}
+                ]
+            });
+            calendar.render();
+            let btn_appointment_create = $('.fc-myCustomButton-button')
+            btn_appointment_create.addClass('rounded-pill px-4')
+            btn_appointment_create.css('text-transform', 'none')
+        });
+    </script>
+{% endblock extra_js %}

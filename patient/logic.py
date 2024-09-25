@@ -2,20 +2,34 @@ import datetime
 
 import requests
 from django.urls import reverse
-from patient.models import Patient, Record
+from patient.models import Patient, Appointment
 
 BOT_TOKEN = '5572492160:AAEL_pd6CsZ5ZSo2rAUkOWX9H-iTo8wamV4'
 
 
-def create_record(post_request, user):
-    patient_id = post_request.get('patient_id')
-    doctor_id = post_request.get('doctor_id')
-    date = post_request.get('date')
-    content = post_request.get('content')
-    Record.objects.create(patient_id=patient_id, doctor_id=doctor_id, date=date, content=content, registrar=user)
-    return dict({'back_url': reverse('record_list'),
+def create_appointment(post_request, user):
+    appointment_type = post_request.get('appointment_type')
+    doctor_id = post_request.get('doctor')
+    appointment_date = post_request.get('appointment_date')
+    appointment_time = post_request.get('appointment_time')
+    duration = post_request.get('duration')
+    patient_id = post_request.get('patient')
+    description = post_request.get('patient')
+    appointment_datetime = f'{appointment_date}T{appointment_time}'
+    Appointment.objects.create(appointment_type=appointment_type, doctor_id=doctor_id,
+                               appointment_date=appointment_datetime, duration=duration, patient_id=patient_id,
+                               description=description, creator=user)
+    return dict({'back_url': reverse('home-view'),
                  'data': ''})
 
+
+def update_appointment_date(post_request, user):
+    results = {'status': 200}
+    appointment_id = post_request.get('appointment_id')
+    appointment_date = post_request.get('appointment_date')
+    duration = post_request.get('duration')
+    Appointment.objects.filter(id=appointment_id).update(appointment_date=appointment_date, duration=duration)
+    return results
 
 def create_patient(post_request, user):
     fullname = post_request.get('fullname')
@@ -43,24 +57,24 @@ def delete_patient(post_request, user):
                  'data': ''})
 
 
-def delete_record(post_request, user):
-    record_id = post_request.get('record_id')
-    Record.objects.filter(id=record_id).delete()
-    return dict({'back_url': reverse('record_list'),
+def delete_appointment(post_request, user):
+    appointment_id = post_request.get('appointment_id')
+    Appointment.objects.filter(id=appointment_id).delete()
+    return dict({'back_url': reverse('appointment_list'),
                  'data': ''})
 
 
-def get_records(post_request, user):
+def get_appointments(post_request, user):
     datetime_now = datetime.datetime.now()
     results = []
-    records = Record.objects.filter(date__year=datetime_now.year,
-                                    date__month=datetime_now.month,
-                                    date__day=datetime_now.day,
-                                    sent=False)
-    for record in records:
+    appointments = Appointment.objects.filter(date__year=datetime_now.year,
+                                              date__month=datetime_now.month,
+                                              date__day=datetime_now.day,
+                                              sent=False)
+    for appointment in appointments:
         results.append({
-            'id': record.id,
-            'date': record.date.strftime("%H:%M")
+            'id': appointment.id,
+            'date': appointment.date.strftime("%H:%M")
         })
     return dict({
         'back_url': reverse(post_request.get('back_url')),
@@ -71,27 +85,27 @@ def get_records(post_request, user):
 def send_sms_today_patients(post_request, user):
     datetime_now = datetime.datetime.now()
     user_id = post_request.get('user_id')
-    records = Record.objects.filter(date__year=datetime_now.year,
-                                    date__month=datetime_now.month,
-                                    date__day=datetime_now.day,
-                                    doctor_id=user_id,
-                                    patient__chat_id__isnull=False)
-    for record in records:
-        if record.patient.gender == 'male':
+    appointments = Appointment.objects.filter(date__year=datetime_now.year,
+                                              date__month=datetime_now.month,
+                                              date__day=datetime_now.day,
+                                              doctor_id=user_id,
+                                              patient__chat_id__isnull=False)
+    for appointment in appointments:
+        if appointment.patient.gender == 'male':
             gender_text = 'Уважаемый'
         else:
             gender_text = 'Уважаемая'
-        text = f'{gender_text}, {record.patient.fullname}\n\n' \
-               f'🕘 Напоминаем вам, что вы записаны сегодня в {record.date.strftime("%Y-%m-%d %H:%M")}\n' \
-               f'🦷 На прием к стоматологу {record.doctor.fullname} \n\n' \
+        text = f'{gender_text}, {appointment.patient.fullname}\n\n' \
+               f'🕘 Напоминаем вам, что вы записаны сегодня в {appointment.date.strftime("%Y-%m-%d %H:%M")}\n' \
+               f'🦷 На прием к стоматологу {appointment.doctor.fullname} \n\n' \
                f'👨🏻‍⚕ Администратор клиники "Центр ортодонтии"\n\n' \
                f'📞 +998(98) 273-52-00\n'
         data = {
-            'chat_id': record.patient.chat_id,
+            'chat_id': appointment.patient.chat_id,
             'text': text
         }
         location_data = {
-            'chat_id': record.patient.chat_id,
+            'chat_id': appointment.patient.chat_id,
             'latitude': '39.662252',
             'longitude': '66.941450',
         }
@@ -100,7 +114,7 @@ def send_sms_today_patients(post_request, user):
 
         requests.post(url, data)
         requests.post(location_url, location_data)
-        record.sent = True
-        record.save()
-    return dict({'back_url': reverse('my_record_list'),
+        appointment.sent = True
+        appointment.save()
+    return dict({'back_url': reverse('my_appointment_list'),
                  'data': ''})

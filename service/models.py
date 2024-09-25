@@ -29,7 +29,7 @@ class Service(models.Model):
         disabled = 'disabled', 'Не активный'
 
     name = models.CharField(verbose_name='Название', max_length=255)
-    price = models.FloatField(verbose_name='Цена', default=0)
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Цена')
     status = models.CharField(verbose_name='Статус', max_length=255, choices=Status.choices, default=Status.active)
     category = models.ForeignKey('ServiceCategory',
                                  on_delete=models.CASCADE,

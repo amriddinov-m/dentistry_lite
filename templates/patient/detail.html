@@ -4,12 +4,16 @@
     <div class="ms-content-wrapper">
         <div class="ms-profile-overview">
             <div class="ms-profile-cover">
-                <img class="ms-profile-img" src="{{ patient.image }}" alt="people">
+                {% if patient.image %}
+                    <img class="ms-profile-img" src="{{ patient.image }}" alt="people">
+                {% else %}
+                    <img class="ms-profile-img" src="{% static 'custom/images/user.png' %}" alt="people">
+                {% endif %}
                 <div class="ms-profile-user-info">
                     <h3 class="ms-profile-username text-white">{{ patient.fullname }}</h3>
                 </div>
                 <div class="ms-profile-user-buttons">
-                    <a href="#create_record_for_patient" data-toggle="modal" class="btn btn-success"> <i
+                    <a href="#create_appointment_for_patient" data-toggle="modal" class="btn btn-success"> <i
                             class="fas fa-calendar-alt"></i>
                         Записать на приём</a>
                     <a href="{% url 'patient_update' patient.pk %}" class="btn btn-primary"> <i
@@ -448,65 +452,72 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="create_record_for_patient" role="dialog" aria-hidden="true">
-        <div class="modal-dialog ms-modal-dialog-width">
-            <div class="modal-content ms-modal-content-width">
-                <div class="modal-header  ms-modal-header-radius-0">
-                    <h4 class="modal-title text-white">Добавить запись на приём</h4>
-                    <button type="button" class="close  text-white" data-dismiss="modal" aria-hidden="true">x</button>
 
+    <div class="modal fade" id="create_appointment_for_patient" tabindex="-1" aria-labelledby="AppointmentCreateModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AppointmentCreateModalLabel">
+                        Новая запись на приём
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                 </div>
-                <div class="modal-body p-0 text-left">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-panel ms-panel-bshadow-none">
-                            <div class="ms-panel-header">
-                                <h6>Детали записи</h6>
-                            </div>
-                            <div class="ms-panel-body">
-                                <form class="needs-validation" novalidate="" action="{% url 'record_action' %}"
-                                      method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="create_record">
-                                    <input type="hidden" name="patient_id" value="{{ patient.pk }}">
-                                    <div class="form-row">
-
-                                        <div class="col-md-6 mb-3">
-                                            <label for="validationCustom10">Доктор</label>
-                                            <div class="input-group">
-                                                <select class="form-control" style="width: 100%" name="doctor_id"
-                                                        id="select_doctor_record">
-                                                    <option disabled selected>Выберите доктора</option>
-                                                    {% for doctor in doctors %}
-                                                        <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="validationCustom01">Время записи</label>
-                                            <div class="input-group">
-                                                <input type="datetime-local" name="date" class="form-control"
-                                                       id="validationCustom01"
-                                                       required="">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12 mb-2">
-                                            <label for="validationCustom11">Контент</label>
-                                            <div class="input-group">
-                                            <textarea class="form-control" name="content" id="" cols="30" rows="10">
-                                            </textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-warning float-right my-4" type="submit">Сохранить</button>
-                                </form>
-                            </div>
-
+                <form method="post" id="id_form_appointment_create" action="{% url 'appointment_action' %}"
+                      class="modal-body">
+                    <input type="hidden" name="action" value="create_appointment">
+                    <input type="hidden" name="patient" value="{{ patient.pk }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Тип записи:</label>
+                            <select name="appointment_type" class="form-control" required>
+                                <option value="" disabled selected>-----------</option>
+                                <option value="">Лечение</option>
+                                <option value="">Консультация</option>
+                                <option value="">Диагностика</option>
+                                <option value="">Осмотр</option>
+                                <option value="">Санация</option>
+                                <option value="">Курация</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Врач:</label>
+                            <select name="doctor" id="id_select_doctor" class="form-control" style="width: 100%"
+                                    required>
+                                <option value="" disabled selected>-</option>
+                                {% for doctor in doctors %}
+                                    <option value="{{ doctor.pk }}">{{ doctor.fullname }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Дата визита:</label>
+                            <input type="date" class="form-control" name="appointment_date" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Время визита:</label>
+                            <input type="time" class="form-control" name="appointment_time" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Продолжительность:</label>
+                            <input type="number" name="duration" class="form-control" value="30" min="30" step="30"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <label class="form-label">Описание:</label>
+                            <textarea name="description" class="form-control" cols="30" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="submit" form="id_form_appointment_create" class="btn btn-primary btn-add-event">
+                        Сохранить
+                    </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -517,7 +528,7 @@
     <script>
         $(document).ready(function () {
             $('#my_data_table').DataTable()
-            $('#select_doctor_record').select2()
+            $('#select_doctor_appointment').select2()
         });
         var doc = $(document);
         doc
