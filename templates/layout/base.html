@@ -1,4 +1,4 @@
-﻿{% load static %}
+﻿{% load static i18n poll_extras %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -237,16 +237,25 @@
                     <li class="ms-nav-item  ms-d-none">
                         <a href="#AppointmentCreateModal" class="text-white" data-toggle="modal"><i
                                 class="flaticon-spreadsheet mr-2"></i>
-                            Записать в очередь
+                            {% trans 'Create appointment' %}
                         </a>
                     </li>
 
                     <li class="ms-nav-item ms-d-none">
                         <a href="#prescription" class="text-white" data-toggle="modal"><i
                                 class="flaticon-pencil mr-2"></i>
-                            Зарегистрировать пациента</a>
+                            {% trans 'Create patient' %}</a>
                     </li>
                 {% endif %}
+
+                <li class="ms-nav-item ms-d-none">
+                    <select class="form-control-sm" onchange="location.href = '{{ request.build_absolute_uri|remove_lang  }}/' + this.value">
+                        <option value="ru" {% if 'ru' in request.path %}selected{% endif %}>RU</option>
+                        <option value="uz" {% if 'uz' in request.path %}selected{% endif %}>UZ</option>
+                        <option value="en"{% if 'en' in request.path %}selected{% endif %}>EN</option>
+                    </select>
+                </li>
+
 
                 <li class="ms-nav-item ms-nav-user dropdown">
                     <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

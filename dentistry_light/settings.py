@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +35,7 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     '/api/v1/(.*)$',
     '/bot/send/',
     '/login/',
+    '/webapp/',
 )
 ALLOWED_HOSTS = ['*']
 
@@ -65,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -130,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = "ru-RU"
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = 'UTC'
 
@@ -139,6 +142,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LANGUAGES = (
+    ('ru', _('Russian')),
+    ('uz', _('Uzbek')),
+    ('en', _('English')),
+)
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

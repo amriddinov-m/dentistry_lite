@@ -187,7 +187,7 @@ class SslFiles(TemplateView):
 
 
 class WebAppView(TemplateView):
-    template_name = 'webapp/index.html'
+    template_name = 'webapp/old.html'
 
 
 range_list = range(1, 1000)
