@@ -2,6 +2,7 @@ import re
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 class RequireLoginMiddleware(object):
@@ -39,3 +40,13 @@ class RequireLoginMiddleware(object):
 
         # Explicitly return None for all non-matching requests
         return None
+
+
+class RedirectToLanguageMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path == '/':
+            return redirect('/ru/')
+        return self.get_response(request)
