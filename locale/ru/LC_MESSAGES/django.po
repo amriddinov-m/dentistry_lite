@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-30 14:30+0500\n"
+"POT-Creation-Date: 2024-10-04 10:36+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\dentistry_light\settings.py:146
+#: .\dentistry_light\settings.py:148
 msgid "Russian"
 msgstr ""
 
-#: .\dentistry_light\settings.py:147
+#: .\dentistry_light\settings.py:149
 msgid "Uzbek"
 msgstr ""
 
-#: .\dentistry_light\settings.py:148
+#: .\dentistry_light\settings.py:150
 msgid "English"
 msgstr ""
 
-#: .\templates\layout\base.html:240
+#: .\templates\layout\base.html:93
+msgid "Home"
+msgstr "Главная"
+
+#: .\templates\layout\base.html:102
+msgid "Patients"
+msgstr "Пациенты"
+
+#: .\templates\layout\base.html:109
+msgid "Doctor"
+msgstr "Персонал"
+
+#: .\templates\layout\base.html:115
+msgid "Services"
+msgstr "Услуги"
+
+#: .\templates\layout\base.html:123
+msgid "Reports"
+msgstr "Отчеты"
+
+#: .\templates\layout\base.html:130
+msgid "Visit List"
+msgstr "Список визитов"
+
+#: .\templates\layout\base.html:132
+msgid "Record List"
+msgstr "Список записей"
+
+#: .\templates\layout\base.html:144
+msgid "My patients' orders"
+msgstr "Мои пациентские визиты"
+
+#: .\templates\layout\base.html:153
+msgid "My record list"
+msgstr "Мои записи"
+
+#: .\templates\layout\base.html:190
+msgid "Cash register"
+msgstr "Касса"
+
+#: .\templates\layout\base.html:195
+msgid "Cash register List"
+msgstr "Список касс"
+
+#: .\templates\layout\base.html:197
+msgid "Приходы и рассходы"
+msgstr ""
+
+#: .\templates\layout\base.html:205
+msgid "Settings"
+msgstr "Настройки"
+
+#: .\templates\layout\base.html:239
 msgid "Create appointment"
 msgstr "Записать в очередь"
 
-#: .\templates\layout\base.html:247
+#: .\templates\layout\base.html:246
 msgid "Create patient"
 msgstr "Зарегистрировать пациента"
 

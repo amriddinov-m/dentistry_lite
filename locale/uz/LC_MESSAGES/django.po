@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-30 14:30+0500\n"
+"POT-Creation-Date: 2024-10-04 10:40+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\dentistry_light\settings.py:146
+#: .\dentistry_light\settings.py:148
 msgid "Russian"
 msgstr ""
 
-#: .\dentistry_light\settings.py:147
+#: .\dentistry_light\settings.py:149
 msgid "Uzbek"
 msgstr ""
 
-#: .\dentistry_light\settings.py:148
+#: .\dentistry_light\settings.py:150
 msgid "English"
 msgstr ""
 
-#: .\templates\layout\base.html:240
+#: .\templates\layout\base.html:93
+msgid "Home"
+msgstr "Asosiy"
+
+#: .\templates\layout\base.html:102
+msgid "Patients"
+msgstr "Bemorlar"
+
+#: .\templates\layout\base.html:109
+msgid "Doctor"
+msgstr "Doctor"
+
+#: .\templates\layout\base.html:115
+msgid "Services"
+msgstr "Xizmatlar"
+
+#: .\templates\layout\base.html:123
+msgid "Reports"
+msgstr "Hisobot"
+
+#: .\templates\layout\base.html:130
+msgid "Visit List"
+msgstr "Tashriflar ro'yxati"
+
+#: .\templates\layout\base.html:132
+msgid "Record List"
+msgstr "Ko'rikga qo'shilganlar ro'yxati"
+
+#: .\templates\layout\base.html:144
+msgid "My patients' orders"
+msgstr "Tashriflar ro'yxati"
+
+#: .\templates\layout\base.html:153
+msgid "My record list"
+msgstr "Ko'rikga qo'shilganlar ro'yxati"
+
+#: .\templates\layout\base.html:190
+msgid "Cash register"
+msgstr "Kassa"
+
+#: .\templates\layout\base.html:195
+msgid "Cash register List"
+msgstr "Kassalar ro'yxati"
+
+#: .\templates\layout\base.html:197
+msgid "Приходы и рассходы"
+msgstr ""
+
+#: .\templates\layout\base.html:205
+msgid "Settings"
+msgstr "Sozlamalar"
+
+#: .\templates\layout\base.html:239
 msgid "Create appointment"
 msgstr "Navbatga yozing"
 
-#: .\templates\layout\base.html:247
+#: .\templates\layout\base.html:246
 msgid "Create patient"
 msgstr "Bemorni ro'yxatdan o'tkazing"
 
