@@ -19,7 +19,7 @@ async def send_welcome(message: types.Message):
     # await PatientState.contact.set()
     markup = types.ReplyKeyboardMarkup()
     markup.add(types.KeyboardButton('Открыть веб страницу',
-                                    web_app=WebAppInfo(url='https://9fad-37-110-214-40.ngrok-free.app/webapp/home-page/')))
+                                    web_app=WebAppInfo(url='https://my.dentify.uz/webapp/home-page/')))
     await message.answer('Здравствуйте, попробуйте наш WEB APP', reply_markup=markup)
 
 
